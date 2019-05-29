@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>SISTUR-INICIO</title>
-	<link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon"/>
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/estilos.css') }}">	
-</head>
-<body>
-	<div class="content">
-		<ul class="slider">
-			<li class="img1"></li>
-			<li class="img2"></li>			
-			<li class="img3"></li>
-			<li class="img4"></li>
-			<li class="img5"></li>			
-		</ul>
-	</div>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Dashboard</div>
+
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    You are logged in!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
