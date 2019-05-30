@@ -10,7 +10,22 @@
     <title>{{ config('app.name', 'Sistur') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" ></script>
+    <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {          
+            $(".prueba").backstretch([
+                { url: '{{ url('/') }}/img/fondo/fondo1.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo2.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo3.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo4.jpg' }
+                ], {                    
+                    fade: 1500,
+                    duration: 3000
+                });
+        });
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,7 +35,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 </head>
-<body>
+<body class="prueba">
     <div id="app">
         <main class="py-4">
             @yield('content')
