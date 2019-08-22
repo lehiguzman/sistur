@@ -62,7 +62,11 @@
                                     </a>
                                 @endif
                             </div>
+                            <div class="col-md-1 offset-md-6">
+                                <a class="btn btn-link text-dark" href="{{ route('register') }}">Registrarse</a>
+                            </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>
