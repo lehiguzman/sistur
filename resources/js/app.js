@@ -19,7 +19,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('dashboard', require('./components/Dashboard.vue').default);
+Vue.component('institucion', require('./components/Institucion.vue').default);
+Vue.component('usuario', require('./components/Usuario.vue').default);
+Vue.component('cuestionario', require('./components/Cuestionario.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,4 +32,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    data: {
+    	menu:0
+    },
 });

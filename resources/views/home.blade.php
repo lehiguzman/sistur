@@ -11,13 +11,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js">    
     <!-- Icons -->
-    <link href="css/plantilla.css" rel="stylesheet">    
+    <link href="css/plantilla.css" rel="stylesheet">   
+    <link href="{{ asset('css/estilos.css') }}" rel="stylesheet"> 
 
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-<div id="app">
-<header class="app-header navbar">
+<div id="app">    
+    <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -28,7 +29,7 @@
         </button>
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item px-3">
-                <a class="nav-link" href="#">Dashbord</a>
+                <a class="nav-link" href="#">Dashboard</a>
             </li>           
         </ul>
         <ul class="nav navbar-nav ml-auto">
@@ -43,12 +44,12 @@
                     <div class="dropdown-header text-center">
                         <strong>Cuenta</strong>
                     </div>
-                    <a class="dropdown-item" href="#" 
+                    <a class="dropdown-item" href="{{ route('logout') }}" 
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa fa-lock"></i> Cerrar sesión</a>
 
-                    <form id="logout-form" action="#" method="POST" style="display: none;">
-                        
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
                     </form>
                 </div>
             </li>
@@ -64,8 +65,8 @@
        @yield('contenido')
 
         <!-- /Fin del contenido principal -->
-    </div>   
-</div>
+    </div>       
+</div> <!-- Fin app -->
     <footer class="app-footer">
         <span><a href="http://www.webtraining-it.com/">webtraining-it.com</a> &copy; 2019</span>
         <span class="ml-auto">Desarrollado por <a href="http://www.webtraining-it.com/">webtraining-it.com</a></span>
@@ -75,5 +76,4 @@
     <script src="js/app.js"></script>
     <script src="js/plantilla.js"></script>
 </body>
-
 </html>

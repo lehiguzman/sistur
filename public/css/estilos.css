@@ -2,3 +2,15 @@ div.card
 {	
 	background: rgba(158, 247, 247, 0.5)	
 }
+
+.color-sidebar {
+	background-color: #648DE1;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+.color-collapse {
+	background-color: #B5C6E9;
+}

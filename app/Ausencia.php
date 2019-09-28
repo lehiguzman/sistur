@@ -1,0 +1,27 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Ausencia extends Model
+{
+    /**
+     * Fields that can be mass assigned.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'fecfal', 'tipo', 'empleado_id', 'descripcion'
+    ];
+
+    /**
+     * Ausencia belongs to .
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function empleado()
+    {    	
+    	return $this->belongsTo(Empleado::class);
+    }
+}
