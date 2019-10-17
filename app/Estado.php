@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Estado extends Model
 {
+    protected $table = "estados";
+
     /**
      * Fields that can be mass assigned.
      *

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Objetivo extends Model
 {
+    protected $table = "objetivos";
+
     /**
      * Fields that can be mass assigned.
      *
@@ -27,13 +29,13 @@ class Objetivo extends Model
     }
 
     /**
-     * Objetivo has many Objetivos.
+     * Objetivo has many Empleados.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function objetivos()
+    public function empleados()
     {
-        // hasMany(RelatedModel, foreignKeyOnRelatedModel = objetivo_id, localKey = id)
-        return $this->hasMany(Objetivo::class);
+        // hasMany(RelatedModel, foreignKeyOnRelatedModel = curso_id, localKey = id)
+        return $this->belongsToMany(Empleado::class);
     }
 }

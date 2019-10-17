@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contenido extends Model
 {
+    protected $table = "contenidos";
+
     /**
      * Fields that can be mass assigned.
      *

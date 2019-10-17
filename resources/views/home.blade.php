@@ -7,13 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sistema Compras-Ventas con Laravel y Vue Js- webtraining-it.com">
     <meta name="keyword" content="Sistema Compras-Ventas con Laravel y Vue Js">
-    <title>Proyecto</title>
+    <title>SIRHTUR</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js">    
     <!-- Icons -->
     <link href="css/plantilla.css" rel="stylesheet">   
     <link href="{{ asset('css/estilos.css') }}" rel="stylesheet"> 
-
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -29,16 +28,16 @@
         </button>
         <ul class="nav navbar-nav d-md-down-none">
             <li class="nav-item px-3">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link" href="#">Panel Administrativo</a>
             </li>           
         </ul>
         <ul class="nav navbar-nav ml-auto">
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <!-- <img src="img/usuario/{{ Auth::user()->imagen }}" class="img-avatar" alt=""> -->
+                    <img src="img/usuario/{{ Auth::user()->imagen }}" class="img-avatar" alt="">
                     <img src="#" class="img-avatar" alt="">
-                    <span class="d-md-down-none">{{ Auth::user()->name }} </span>
+                    <span class="d-md-down-none">{{ Auth::user()->nombre }} </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <div class="dropdown-header text-center">
@@ -68,8 +67,7 @@
     </div>       
 </div> <!-- Fin app -->
     <footer class="app-footer">
-        <span><a href="http://www.webtraining-it.com/">webtraining-it.com</a> &copy; 2019</span>
-        <span class="ml-auto">Desarrollado por <a href="http://www.webtraining-it.com/">webtraining-it.com</a></span>
+        <span><a><b><i>SIRHTUR</i></b></a> &copy; 2019</span>        
     </footer>
 
     <!-- Bootstrap and necessary plugins -->

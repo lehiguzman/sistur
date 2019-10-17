@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curso extends Model
 {
+    protected $table = "cursos";
+
     /**
      * Fields that can be mass assigned.
      *
@@ -33,6 +35,6 @@ class Curso extends Model
     public function empleados()
     {
         // hasMany(RelatedModel, foreignKeyOnRelatedModel = curso_id, localKey = id)
-        return $this->hasMany(Empleado::class);
+        return $this->belongsToMany(Empleado::class);
     }
 }

@@ -7440,7 +7440,14 @@ base-chart.chart {
   padding: 0 1rem;
   color: #151b1e;
   background: #f0f3f5;
-  border-top: 1px solid #c2cfd6; }
+  border-top: 1px solid #c2cfd6; 
+  position: fixed;
+  left: 0;
+  bottom: 0; 
+  width: 100%;  
+  height: 5%;
+  text-align: center;
+}
 
 .row.row-equal {
   padding-right: 7.5px;
@@ -8846,14 +8853,7 @@ app-root {
   -ms-flex: 0 0 50px;
       flex: 0 0 50px; }
 
-.app-body {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: row;
-      flex-direction: row;
-  -ms-flex-positive: 1;
-      flex-grow: 1;
-  overflow-x: hidden; }
+.app-body { }
   .app-body .main {
     -ms-flex: 1;
         flex: 1;

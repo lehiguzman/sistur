@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id', 'nombre', 'direccion', 'telefono', 'email' ,'password', 'condicion', 'imagen', 'institucion_id'
     ];
 
     /**
@@ -46,5 +46,16 @@ class User extends Authenticatable
     {
         // hasMany(RelatedModel, foreignKeyOnRelatedModel = user_id, localKey = id)
         return $this->hasMany(Respuesta::class);
+    }
+
+    /**
+     * Cuestionario belongs to Institucion.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function institucion()
+    {
+        // belongsTo(RelatedModel, foreignKey = institucion_id, keyOnRelatedModel = id)
+        return $this->belongsTo(Institucion::class);
     }
 }

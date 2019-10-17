@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Etapa extends Model
 {
+    protected $table = "etapas";
+
     /**
      * Fields that can be mass assigned.
      *
      * @var array
      */
     protected $fillable = [
-    	'descripcion', 'objetivo_id'
+    	'titulo', 'descripcion', 'fecini', 'fecfin', 'estatus', 'objetivo_id'
     ];
 
     /**

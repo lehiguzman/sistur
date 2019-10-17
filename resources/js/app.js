@@ -21,8 +21,16 @@ window.Vue = require('vue');
 
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('institucion', require('./components/Institucion.vue').default);
-Vue.component('usuario', require('./components/Usuario.vue').default);
+Vue.component('tipo-institucion', require('./components/TipoInstitucion.vue').default);
+Vue.component('rama', require('./components/Rama.vue').default);
+Vue.component('estado', require('./components/Estado.vue').default);
+Vue.component('cargo', require('./components/Cargo.vue').default);
+Vue.component('empleado', require('./components/Empleado.vue').default);
+Vue.component('ausencia', require('./components/Ausencia.vue').default);
+Vue.component('objetivo', require('./components/Objetivo.vue').default);
+Vue.component('curso', require('./components/Curso.vue').default);
 Vue.component('cuestionario', require('./components/Cuestionario.vue').default);
+Vue.component('usuario', require('./components/Usuario.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

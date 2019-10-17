@@ -39,32 +39,21 @@
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label font-weight-bold" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
+                            <div class="col-md-6 offset-md-4">                                
                             </div>
                         </div>
 
                         <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-12 offset-md-5">
                                 <button type="submit" class="btn btn-secondary">
                                     {{ __('Login') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link text-dark" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="col-md-1 offset-md-6">
-                                <a class="btn btn-link text-dark" href="{{ route('register') }}">Registrarse</a>
-                            </div>
+                            </div> 
+                            <div class="col-md-12 offset-md-5">
+                                <b><a class="btn btn-link text-dark" style="text-decoration: none; font-size: 2em;" href="{{ route('register') }}">Registrarse</a></b>
+                            </div>                          
+                               
+                            
                         </div>
                         
                     </form>

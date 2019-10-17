@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cuestionario extends Model
 {
+    protected $table = "cuestionarios";
+
     /**
      * Fields that can be mass assigned.
      *

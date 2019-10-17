@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rama extends Model
 {
+    protected $table = "ramas";
+
     /**
      * Fields that can be mass assigned.
      *

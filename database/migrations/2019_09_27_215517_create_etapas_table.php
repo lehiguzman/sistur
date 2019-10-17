@@ -15,7 +15,11 @@ class CreateEtapasTable extends Migration
     {
         Schema::create('etapas', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('titulo');
             $table->string('descripcion');
+            $table->date('fecini');
+            $table->date('fecfin');
+            $table->integer('estatus');
             $table->unsignedInteger('objetivo_id'); 
             $table->foreign('objetivo_id')->references('id')->on('objetivos'); 
             $table->timestamps();
