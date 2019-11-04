@@ -23,8 +23,8 @@
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="nombre">Curso</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarCurso();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarCurso();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarCurso(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarCurso(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -141,12 +141,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Descripción del contenido <span class="text-error">(*Ingrese descripción)</span></label>
-                                    <input type="text" step="any" class="form-control" v-model="descripcionCont">
+                                    <input type="text" step="any" class="form-control" v-model="descripcionCont" placeholder="Ingrese descripción del contenido">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <button @click="agregarDetalle()" class="btn btn-primary form-control btnagregar"><i class="fa fa-plus fa-2x"></i> Agregar detalle</button>
+                                    <button @click="agregarDetalle()" class="btn btn-primary form-control btnagregar"><i class="fa fa-plus fa-2x"></i> Agregar </button>
                                 </div>
                             </div>
 
@@ -310,6 +310,7 @@
         @media (min-width: 600px) {
         .btnagregar {
             margin-top: 2rem;
+
         }
     }
 </style>
@@ -386,14 +387,24 @@
             //Modulo
             listarCurso(page, buscar, criterio) {
                 let me = this; 
-                var url = '/curso';                
+                var url = '/curso?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;                
 
                 axios.get(url).then( function( response ) {                    
-                    me.cursos = response.data;
+                    
+                    var respuesta = response.data;
+                    me.cursos = respuesta.cursos.data;
+
                 });                               
             },
 
             registrarCurso(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarCurso()) {
                     return;
                 }
@@ -413,6 +424,7 @@
                         me.cupos= 0;
                         me.descripcion= '';
                         me.arrayDetalle= [];
+                        alerta.fire("Curso registrado exitosamente");
                         me.listarCurso(1, '', 'nombre');
                     }).catch(function (error) {
                     // handle error
@@ -533,8 +545,12 @@
             },
 
             agregarDetalle() {
+                if(this.validarDetalle()) {
+                    return;
+                }
+
                 let me = this;
-                
+                console.log("adasdas");
                 me.arrayDetalle.push({ 
                 curso_id: me.curso_id,
                 contenido: me.contenido,
@@ -542,6 +558,23 @@
                 });
                 me.contenido= '';
                 me.descripcionCont = '';                                             
+            },
+
+            validarDetalle() {
+                this.errorCurso=0;
+                this.errorMostrarMsjCurso=[];
+
+                if(!this.contenido){
+                    this.errorMostrarMsjCurso.push("(*) El contenido no puede estar vacio");
+                }
+
+                if(!this.descripcionCont){
+                    this.errorMostrarMsjCurso.push("(*) La descripcion del contenido no puede estar vacia");
+                }
+
+                if(this.errorMostrarMsjCurso.length) this.errorCurso=1;
+                return this.errorCurso;
+
             },
 
             eliminarDetalle(index) {                

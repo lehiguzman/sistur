@@ -15,23 +15,13 @@
                             <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Estado
                         </button>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Estado</option>
-                                    </select>
-                                    <input type="text" @keyup.enter="listarEstado();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarEstado();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">                        
                         <table class="table table-bordered table-striped table-sm">
                             <thead>
                                 <tr class="bg-primary">                                   
                                     <th>Estado</th>                                    
-                                    <th>Editar</th>                                    
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>                    
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -208,13 +198,22 @@
             },
 
             registrarEstado(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarEstado()) {
                     return;
                 }
+
                 let me=this;
                 axios.post('/estado/registrar', {
                         'nombre':me.nombre,
                     }).then(function (response) {
+                        alerta.fire("Estado registrado exitosamente");
                         me.cerrarModal();
                         me.listarEstado(1, '', 'nombre');
                     }).catch(function (error) {
@@ -224,15 +223,24 @@
             },
 
             actualizarEstado(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarEstado()) {
                     return;
                 }
+
                 let me=this;
                 axios.put('/estado/actualizar', {
                         'id':me.estado_id,
                         'nombre':me.nombre,                        
                     }).then(function (response) {
                         //console.log( response );
+                        alerta.fire("Estado editado exitosamente");
                         me.cerrarModal();
                         me.listarEstado(1, '', 'nombre');
                     }).catch(function (error) {

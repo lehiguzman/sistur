@@ -21,10 +21,10 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Objetivo</option>
+                                        <option value="titulo">Objetivo</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarObjetivo();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarObjetivo();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarObjetivo(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarObjetivo(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -103,49 +103,51 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row border">
+                    <div class="card-body">
+                        <div class="form-group row border">
 
-                        <h3>Lista de Etapas del Objetivo</h3>
+                            <h3>Lista de Etapas del Objetivo</h3>
 
-                        <div class="table-responsive col-md-12">
-                            <table class="table table-bordered table-striped table-sm">
-                                <thead>
-                                    <tr class="bg-success">
-                                        <th>Eliminar</th>
-                                        <th>Etapa</th>
-                                        <th>Descripción</th>
-                                        <th>Fecha de inicio</th>
-                                        <th>Fecha de finalización</th>
-                                        <th>Estatus</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="arrayDetalle.length">
-                                    <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
-                                        <td>
-                                            <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
-                                                <i class="fa fa-times fa-2x"></i>
-                                            </button>
-                                        </td>
-                                        <td v-text="detalle.titulo">
-                                        </td>  
-                                        <td v-text="detalle.descripcion">
-                                        </td>
-                                        <td v-text="detalle.fecini">
-                                        </td>
-                                        <td v-text="detalle.fecfin">
-                                        </td>
-                                        <td v-text="detalle.estatus">
-                                        </td>
-                                    </tr>                                        
-                                </tbody>
-                                <tbody v-else>
-                                    <tr>
-                                        <td colspan="6">
-                                            No se han agregado etapas al objetivo
-                                        </td>
-                                    </tr>
-                                </tbody>                                    
-                            </table>
+                            <div class="table-responsive col-md-10">
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr class="bg-success">
+                                            <th>Eliminar</th>
+                                            <th>Etapa</th>
+                                            <th>Descripción</th>
+                                            <th>Fecha de inicio</th>
+                                            <th>Fecha de finalización</th>
+                                            <th>Estatus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="arrayDetalle.length">
+                                        <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
+                                            <td>
+                                                <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
+                                                    <i class="fa fa-times fa-2x"></i>
+                                                </button>
+                                            </td>
+                                            <td v-text="detalle.titulo">
+                                            </td>  
+                                            <td v-text="detalle.descripcion">
+                                            </td>
+                                            <td v-text="detalle.fecini">
+                                            </td>
+                                            <td v-text="detalle.fecfin">
+                                            </td>
+                                            <td v-text="detalle.estatus">
+                                            </td>
+                                        </tr>                                        
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="6">
+                                                No se han agregado etapas al objetivo
+                                            </td>
+                                        </tr>
+                                    </tbody>                                    
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -281,7 +283,7 @@
                     'from' : 0,
                     'to' : 0,
                 },
-                criterio: 'nombre',
+                criterio: 'titulo',
                 buscar: '',
 
                 //modal
@@ -330,14 +332,24 @@
             //Modulo
             listarObjetivo(page, buscar, criterio) {
                 let me = this; 
-                var url = '/objetivo';
+                var url = '/objetivo?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    me.objetivos = response.data;
+                    
+                    var respuesta = response.data;
+                    me.objetivos = respuesta.objetivos.data;
+
                 });                               
             },
 
             registrarObjetivo(){
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarObjetivo()) {
                     return;
                 }
@@ -348,7 +360,9 @@
                         'descripcion':me.descripcion,
                         'data': me.arrayDetalle
                     }).then(function (response) {    
-                        console.log("exito");
+                        swalWithBootstrapButtons.fire(
+                            'Objetivo agregado exitosamente',
+                            );
                         me.listado = 1;
                         me.titulo = '';
                         me.descripcion = '';
@@ -459,8 +473,20 @@
                     this.errorMostrarMsjEtapa.push("(*) El titulo no puede estar vacio");
                 }                
 
-                if(!this.descripcion){
+                if(!this.descripcionEtapa){
                     this.errorMostrarMsjEtapa.push("(*) La descripción no puede estar vacia");
+                }
+
+                 if(!this.fecini){
+                    this.errorMostrarMsjEtapa.push("(*) La fecha de inicio no puede estar vacia");
+                }
+
+                 if(!this.fecfin){
+                    this.errorMostrarMsjEtapa.push("(*) La fecha de finalización no estar vacia");
+                }
+
+                 if(!this.estatus){
+                    this.errorMostrarMsjEtapa.push("(*) El estatus no puede estar vacio");
                 }
 
                 if(this.errorMostrarMsjEtapa.length) this.errorEtapa=1;

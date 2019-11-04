@@ -14,8 +14,29 @@ class InstitucionController extends Controller
      */
     public function index(Request $request)
     {
-       $instituciones = Institucion::all();
-       return $instituciones;
+       if(!$request->ajax()) return redirect('/');
+            
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $instituciones = Institucion::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $instituciones = Institucion::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $instituciones->total(),
+                'current_page' => $instituciones->currentPage(),
+                'per_page' => $instituciones->perPage(),
+                'last_page' => $instituciones->lastPage(),
+                'from' => $instituciones->firstItem(),
+                'to' => $instituciones->lastItem(),
+            ],
+
+            'instituciones' => $instituciones
+        ];
     }
 
     /**
@@ -54,9 +75,19 @@ class InstitucionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
+
+        $institucion = Institucion::findOrFail($request->id);
+        $institucion->nombre = $request->nombre;
+        $institucion->telefono = $request->telefono;
+        $institucion->direccion = $request->direccion;
+        $institucion->tipo_id = $request->tipo_id;
+        $institucion->rama_id = $request->rama_id;
+        $institucion->estado_id = $request->estado_id;        
+        $institucion->save();
+
     }
 
     /**

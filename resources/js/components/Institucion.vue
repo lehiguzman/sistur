@@ -9,10 +9,10 @@
                 <div class="card">
                     <div class="card-header">
 
-                       <h2>Listado de Instituciones</h2><br/>
+                       <h2>Listado de Empresas</h2><br/>
                       
                         <button class="btn btn-primary btn-lg" type="button" @click="abrirModal('institucion', 'registrar')">
-                            <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Institucion
+                            <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Empresa
                         </button>
                     </div>
                     <div class="card-body">
@@ -22,8 +22,8 @@
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="nombre">Nombre</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarInstitucion();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarInstitucion();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarInstitucion(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarInstitucion(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -95,9 +95,15 @@
 
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Institución</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Empresa</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de institución">                                       
+                                        <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de empresa">                                       
+                                    </div>
+                                </div>                                
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Dirección</label>
+                                    <div class="col-md-9">
+                                    <input type="textarea" v-model="direccion" class="form-control" placeholder="Ingrese dirección">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -107,9 +113,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="email-input">Dirección</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de Empresa</label>
                                     <div class="col-md-9">
-                                    <input type="textarea" v-model="direccion" class="form-control" placeholder="Ingrese dirección">
+                                        
+                                        <!--la variable idcategoria asociado a v-model la asignamos
+                                        en la propiedad data en javascript (ver al final) -->
+
+                                        <select class="form-control" v-model="tipo_id">
+                                          
+                                          <!-- el id y nombre asociado en el objeto categoria vienen de los campos
+                                          de la tabla categorias de la bd-->
+                                          <option value="0" disabled>Seleccione</option>
+                                          <!--el arrayCategoria es una variable de la data javascript de vue 
+                                          y se cargan los registros de la categoria una vez se abra la ventana
+                                          modal-->
+                                          <option v-for="tipo in arrayTipo" :key="tipo.id" :value="tipo.id" v-text="tipo.nombre"></option>
+
+                                        </select>
+                                       
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -132,28 +153,7 @@
                                         </select>
                                        
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de Institución</label>
-                                    <div class="col-md-9">
-                                        
-                                        <!--la variable idcategoria asociado a v-model la asignamos
-                                        en la propiedad data en javascript (ver al final) -->
-
-                                        <select class="form-control" v-model="tipo_id">
-                                          
-                                          <!-- el id y nombre asociado en el objeto categoria vienen de los campos
-                                          de la tabla categorias de la bd-->
-                                          <option value="0" disabled>Seleccione</option>
-                                          <!--el arrayCategoria es una variable de la data javascript de vue 
-                                          y se cargan los registros de la categoria una vez se abra la ventana
-                                          modal-->
-                                          <option v-for="tipo in arrayTipo" :key="tipo.id" :value="tipo.id" v-text="tipo.nombre"></option>
-
-                                        </select>
-                                       
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Estado</label>
                                     <div class="col-md-9">
@@ -289,16 +289,25 @@
             //Modulo
             listarInstitucion(page, buscar, criterio) {
                 let me = this; 
-                var url = '/institucion';
 
-                axios.get(url).then( function( response ) {
-                    //console.log(response.data);
-                    me.instituciones = response.data;
-                    console.log(me.instituciones);
+                var url = '/institucion?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
+                    
+                axios.get(url).then( function( response ) {                  
+                    
+                    var respuesta = response.data;
+                    me.instituciones = respuesta.instituciones.data;
+                    
                 });                               
             },
 
             registrarInstitucion(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarInstitucion()) {
                     return;
                 }
@@ -311,6 +320,38 @@
                         'tipo_id': me.tipo_id,
                         'estado_id': me.estado_id,
                     }).then(function (response) {
+                        alerta.fire("Empresa registrada exitosamente");
+                        me.cerrarModal();
+                        me.listarInstitucion(1, '', 'nombre');
+                    }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    });
+            },
+
+            actualizarInstitucion(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
+                if(this.validarInstitucion()) {
+                    return;
+                }
+
+                let me=this;
+                axios.put('/institucion/actualizar', {
+                        'id':me.institucion_id,
+                        'nombre':me.nombre,
+                        'telefono':me.telefono,
+                        'direccion':me.direccion,
+                        'rama_id': me.rama_id,
+                        'tipo_id': me.tipo_id,
+                        'estado_id': me.estado_id,
+                    }).then(function (response) {
+                        alerta.fire("Empresa actualizada exitosamente");
                         me.cerrarModal();
                         me.listarInstitucion(1, '', 'nombre');
                     }).catch(function (error) {
@@ -324,8 +365,29 @@
                 this.errorMostrarMsjInstitucion=[];
 
                 if(!this.nombre){
-                    this.errorMostrarMsjInstitucion.push("(*) El nombre de la institucion no puede estar vacio");
+                    this.errorMostrarMsjInstitucion.push("(*) El nombre de la empresa no puede estar vacio");
                 }
+
+                if(!this.telefono){
+                    this.errorMostrarMsjInstitucion.push("(*) El telefono de la empresa no puede estar vacio");
+                }
+
+                if(!this.direccion){
+                    this.errorMostrarMsjInstitucion.push("(*) La dirección de la empresa no puede estar vacio");
+                }
+
+                if(!this.rama_id){
+                    this.errorMostrarMsjInstitucion.push("(*) La rama de la empresa no puede estar vacio");
+                }
+
+                if(!this.tipo_id){
+                    this.errorMostrarMsjInstitucion.push("(*) El tipo de empresa no puede estar vacio");
+                }
+
+                if(!this.estado_id){
+                    this.errorMostrarMsjInstitucion.push("(*) Debe seleccionar un estado");
+                }
+
                 if(this.errorMostrarMsjInstitucion.length) this.errorInstitucion=1;
                 return this.errorInstitucion;
             },      
@@ -338,7 +400,7 @@
                         switch(accion){
                             case "registrar":{
                                 this.modal = 1;
-                                this.tituloModal="Registrar Institucion"
+                                this.tituloModal="Registrar Empresa"
                                 this.nombre = "";   
                                 this.rama_id=0;
                                 this.tipo_id=0; 
@@ -348,10 +410,12 @@
                             }
                             case "actualizar": {
                                 this.modal = 1;
-                                this.tituloModal = "Editar Institucion";
+                                this.tituloModal = "Editar Empresa";
                                 this.tipoAccion=2;
                                 this.institucion_id = data["id"];                                
-                                this.nombre = data["nombre"];    
+                                this.nombre = data["nombre"];
+                                this.telefono = data["telefono"];
+                                this.direccion = data["direccion"]; 
                                 this.rama_id = data["rama_id"];
                                 this.tipo_id = data["tipo_id"];
                                 this.estado_id = data["estado_id"];                          

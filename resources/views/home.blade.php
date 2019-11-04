@@ -57,7 +57,14 @@
 
     <div class="app-body">
 
-            @include('plantilla.sidebarAdministrador')
+            @if(Auth::user()->rol == 1)
+                @include('plantilla.sidebarAdministrador')
+            @elseif(Auth::user()->rol == 2)
+                @include('plantilla.sidebarGerente')
+            @elseif(Auth::user()->rol == 3)
+                @include('plantilla.sidebarEmpleado')
+            @else
+            @endif
        
         <!-- Contenido Principal -->
 

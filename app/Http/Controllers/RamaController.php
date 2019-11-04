@@ -12,10 +12,31 @@ class RamaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ramas = Rama::all();
-        return $ramas;
+        if(!$request->ajax()) return redirect('/');
+            
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $ramas = Rama::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $ramas = Rama::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $ramas->total(),
+                'current_page' => $ramas->currentPage(),
+                'per_page' => $ramas->perPage(),
+                'last_page' => $ramas->lastPage(),
+                'from' => $ramas->firstItem(),
+                'to' => $ramas->lastItem(),
+            ],
+
+            'ramas' => $ramas
+        ];
     }
 
     /**

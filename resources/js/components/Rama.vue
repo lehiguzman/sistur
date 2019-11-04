@@ -20,10 +20,10 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Rama</option>
+                                        <option value="titulo">Rama</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarRama();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarRama();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarRama(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarRama(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,8 @@
                                 <tr class="bg-primary">                                   
                                     <th>Rama</th>
                                     <th>Descripción</th>
-                                    <th>Editar</th>                                    
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>                               
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -153,7 +154,8 @@
         data() {
             return {
                 ramas: [],
-                nombre: "", 
+                titulo: "",
+                descripcion: "",
                 rama_id: 0,               
 
                 //por defecto
@@ -165,7 +167,7 @@
                     'from' : 0,
                     'to' : 0,
                 },
-                criterio: 'nombre',
+                criterio: 'titulo',
                 buscar: '',
 
                 //modal
@@ -208,14 +210,24 @@
             //Modulo
             listarRama(page, buscar, criterio) {
                 let me = this; 
-                var url = '/rama';
+                var url = '/rama?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
-                axios.get(url).then( function( response ) {                    
-                    me.ramas = response.data;
+                axios.get(url).then( function( response ) {
+
+                    var respuesta = response.data;
+                    me.ramas = respuesta.ramas.data;
+
                 });                               
             },
 
             registrarRama(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarRama()) {
                     return;
                 }
@@ -224,8 +236,9 @@
                         'titulo':me.titulo,
                         'descripcion':me.descripcion,
                     }).then(function (response) {
+                        alerta.fire("Rama registrada exitosamente");
                         me.cerrarModal();
-                        me.listarRama(1, '', 'nombre');
+                        me.listarRama(1, '', 'titulo');
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -233,18 +246,26 @@
             },
 
             actualizarRama(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarRama()) {
                     return;
                 }
+
                 let me=this;
                 axios.put('/rama/actualizar', {
                         'id':me.rama_id,
                         'titulo':me.titulo,
                         'descripcion':me.descripcion,
                     }).then(function (response) {
-                        //console.log( response );
+                        alerta.fire("Rama registrada exitosamente");
                         me.cerrarModal();
-                        me.listarRama(1, '', 'nombre');
+                        me.listarRama(1, '', 'titulo');
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -273,7 +294,7 @@
                     let me=this;
                         axios.delete('/rama/eliminar/'+id).then(function (response) {  
                                 //console.log( response );
-                                me.listarRama(1, '', 'nombre');
+                                me.listarRama(1, '', 'titulo');
                                 swalWithBootstrapButtons.fire(
                                     'Eliminado!',
                                     'Rama eliminada.',
@@ -312,7 +333,7 @@
                                 this.modal = 1;
                                 this.tituloModal="Registrar rama";
                                 this.tipoAccion = 1;
-                                this.nombre = "";                                
+                                this.titulo = "";                                
                                 break;
                             }
                             case "actualizar": {
@@ -331,7 +352,8 @@
 
             cerrarModal() { 
                 this.modal = 0;
-                this.nombre = "";                
+                this.titulo = "";   
+                this.descripcion = "";                
                 this.tituloModal = "";
             },
 

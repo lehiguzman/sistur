@@ -14,8 +14,28 @@ class EmpleadoController extends Controller
      */
     public function index(Request $request)
     {
-       $empleados = Empleado::all();
-       return $empleados;
+       
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $empleados = Empleado::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $empleados = Empleado::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $empleados->total(),
+                'current_page' => $empleados->currentPage(),
+                'per_page' => $empleados->perPage(),
+                'last_page' => $empleados->lastPage(),
+                'from' => $empleados->firstItem(),
+                'to' => $empleados->lastItem(),
+            ],
+
+            'empleados' => $empleados
+        ];
     }
 
     /**
@@ -49,7 +69,7 @@ class EmpleadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $empleado = Empleado::findOrFail($request->id);        
         $empleado->cedula = $request->cedula;
@@ -72,7 +92,7 @@ class EmpleadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
          if(!$request->ajax()) return redirect('/');              
 

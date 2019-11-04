@@ -14,10 +14,31 @@ class CuestionarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cuestionarios = Cuestionario::all();
-        return $cuestionarios;
+        if(!$request->ajax()) return redirect('/');
+            
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $cuestionarios = Cuestionario::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $cuestionarios = Cuestionario::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $cuestionarios->total(),
+                'current_page' => $cuestionarios->currentPage(),
+                'per_page' => $cuestionarios->perPage(),
+                'last_page' => $cuestionarios->lastPage(),
+                'from' => $cuestionarios->firstItem(),
+                'to' => $cuestionarios->lastItem(),
+            ],
+
+            'cuestionarios' => $cuestionarios
+        ];
     }
 
     public function obtenerCabecera(Request $request){

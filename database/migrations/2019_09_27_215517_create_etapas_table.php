@@ -21,7 +21,7 @@ class CreateEtapasTable extends Migration
             $table->date('fecfin');
             $table->integer('estatus');
             $table->unsignedInteger('objetivo_id'); 
-            $table->foreign('objetivo_id')->references('id')->on('objetivos'); 
+            $table->foreign('objetivo_id')->references('id')->on('objetivos')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

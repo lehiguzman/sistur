@@ -15,23 +15,13 @@
                             <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Tipo de institución
                         </button>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Tipo</option>
-                                    </select>
-                                    <input type="text" @keyup.enter="listarTipo();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarTipo();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">                        
                         <table class="table table-bordered table-striped table-sm">
                             <thead>
                                 <tr class="bg-primary">                                   
                                     <th>Tipo</th>                                    
-                                    <th>Editar</th>                                    
+                                    <th>Editar</th> 
+                                    <th>Eliminar</th>                                    
                                 </tr>
                             </thead>
                             <tbody>                               

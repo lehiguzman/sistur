@@ -18,7 +18,7 @@ class CreatePreguntasTable extends Migration
             $table->string('pregunta', 200);
             $table->integer('tipo');
             $table->unsignedInteger('cuestionario_id'); 
-            $table->foreign('cuestionario_id')->references('id')->on('cuestionarios');
+            $table->foreign('cuestionario_id')->references('id')->on('cuestionarios')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -29,7 +29,7 @@ class AusenciaController extends Controller
         $ausencia = new Ausencia();
         $ausencia->fecfal = $request->fecfal;
         $ausencia->tipo = $request->tipo;
-        $ausencia->descripcion = $request->descripcion;
+        $ausencia->observacion = $request->observacion;
 		$ausencia->empleado_id = $request->empleado_id;
         $ausencia->save();
     }
@@ -48,7 +48,7 @@ class AusenciaController extends Controller
         $ausencia = Ausencia::findOrFail($request->id);        
         $ausencia->fecfal = $request->fecfal;
         $ausencia->tipo = $request->tipo;
-        $ausencia->descripcion = $request->descripcion;
+        $ausencia->observacion = $request->observacion;
 		$ausencia->empleado_id = $request->empleado_id;       
         $ausencia->save();
     }

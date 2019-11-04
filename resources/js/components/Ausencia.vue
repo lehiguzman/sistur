@@ -33,7 +33,8 @@
                                     <th>Empleado</th>
                                     <th>Fecha ausencia</th>
                                     <th>Tipo de ausencia</th>
-                                    <th>Editar</th>                                    
+                                    <th>Editar</th> 
+                                    <th>Eliminar</th>                    
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -146,7 +147,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Observacion </label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="descripcion" class="form-control" placeholder="Observación">
+                                        <input type="text" v-model="Observacion" class="form-control" placeholder="Observación">
                                     </div>
                                 </div>                            
                             </form>
@@ -196,7 +197,7 @@
             return {
                 ausencias: [],
                 fecfal: "",                 
-                descripcion: "",
+                observacion: "",
                 ausencia_id: 0,    
                 tipo: 0,           
 
@@ -264,6 +265,13 @@
             },
 
             registrarAusencia(){
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarAusencia()) {
                     return;
                 }
@@ -271,9 +279,12 @@
                 axios.post('/ausencia/registrar', {
                         'fecfal':me.fecfal,
                         'tipo':me.tipo,
-                        'descripcion':me.descripcion,
+                        'observacion':me.observacion,
                         'empleado_id':me.empleado_id,
                     }).then(function (response) {
+                        swalWithBootstrapButtons.fire(                                    
+                                    'Ausencia registrada exitosamente.'                                    
+                                )
                         me.cerrarModal();
                         me.listarAusencia(1, '', 'nombre');
                     }).catch(function (error) {
@@ -291,7 +302,7 @@
                         'id':me.ausencia_id,
                         'fecfal':me.fecfal,
                         'tipo':me.tipo,                        
-                        'descripcion':me.descripcion,
+                        'observacion':me.observacion,
                         'empleado_id':me.empleado_id,
                     }).then(function (response) {
                         //console.log( response );
@@ -374,7 +385,7 @@
                                 this.tipoAccion = 1;
                                 this.fecfal = "";                                
                                 this.tipo = "";                                
-                                this.descripcion = "";                                
+                                this.observacion = "";                                
                                 this.empleado_id = "";                                
                                 break;
                             }
@@ -385,7 +396,7 @@
                                 this.ausencia_id = data["id"];
                                 this.fecfal = data["fecfal"];
                                 this.tipo = data["tipo"];                                
-                                this.descripcion = data["descripcion"];                                 
+                                this.observacion = data["observacion"];                                 
                                 this.empleado_id = data["empleado_id"];
                                 break;
                             }                         
@@ -399,7 +410,7 @@
                 this.modal = 0;
                 this.fecfal = "";                
                 this.tipo = 0;                
-                this.descripcion = "";                
+                this.observacion = "";                
                 this.empleado_id = 0;                
                 this.tituloModal = "";
             },            

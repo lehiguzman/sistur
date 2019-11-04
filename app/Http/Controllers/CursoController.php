@@ -15,10 +15,29 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cursos = Curso::all();
-        return $cursos;
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $cursos = Curso::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $cursos = Curso::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $cursos->total(),
+                'current_page' => $cursos->currentPage(),
+                'per_page' => $cursos->perPage(),
+                'last_page' => $cursos->lastPage(),
+                'from' => $cursos->firstItem(),
+                'to' => $cursos->lastItem(),
+            ],
+
+            'cursos' => $cursos
+        ];
     }
 
     public function obtenerCabecera(Request $request){
@@ -126,11 +145,23 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function selectCursoEmpleado(Request $request)
+    public function selectCursoEmpleado(Request $request, $curso_id)
     {
-        //if(!$request->ajax()) return redirect('/');
-        $empleados = Empleado::all();
-        return ['empleados' => $empleados ];
+        $empleadosAll = Empleado::all();                
+        $curso = Curso::find($curso_id);        
+        
+        $empleados_curso = $curso->empleados;
+        $arrayEmpleados = [];
+
+        foreach ($curso->empleados as $emp) {
+            $arrayEmpleados[] = $emp->id;
+        }
+
+        $empleados = DB::table('empleados')
+                    ->whereNotIn('id', $arrayEmpleados)
+                    ->get();
+        
+        return [ 'empleados' => $empleados ];
     }
 
     /**

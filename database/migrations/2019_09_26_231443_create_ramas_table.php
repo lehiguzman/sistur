@@ -16,7 +16,7 @@ class CreateRamasTable extends Migration
         Schema::create('ramas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('titulo', 50);
-            $table->string('descripcion', 100);
+            $table->string('descripcion', 100)->nullable();
             $table->timestamps();
         });
     }

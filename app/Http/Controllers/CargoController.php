@@ -12,10 +12,31 @@ class CargoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cargos = Cargo::all();
-        return $cargos;
+        if(!$request->ajax()) return redirect('/');
+            
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $cargos = Cargo::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $cargos = Cargo::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $cargos->total(),
+                'current_page' => $cargos->currentPage(),
+                'per_page' => $cargos->perPage(),
+                'last_page' => $cargos->lastPage(),
+                'from' => $cargos->firstItem(),
+                'to' => $cargos->lastItem(),
+            ],
+
+            'cargos' => $cargos
+        ];
     }
 
     /**

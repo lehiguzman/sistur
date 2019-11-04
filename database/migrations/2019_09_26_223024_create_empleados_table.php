@@ -17,17 +17,17 @@ class CreateEmpleadosTable extends Migration
             $table->increments('id');
             $table->string('cedula', 15);
             $table->string('nombre', 50);
-            $table->string('email', 50);
-            $table->string('telefono', 15);
-            $table->string('movil', 15);
-            $table->string('direccion', 100);
-            $table->float('salario', 8,2);
-            $table->date('fecing');
-            $table->date('fecegr');
-            $table->unsignedInteger('cargo_id'); 
-            $table->foreign('cargo_id')->references('id')->on('cargos');
             $table->unsignedInteger('institucion_id'); 
             $table->foreign('institucion_id')->references('id')->on('instituciones');
+            $table->string('email', 50);            
+            $table->string('movil', 15);
+            $table->string('telefono', 15)->nullable();
+            $table->string('direccion', 100)->nullable();
+            $table->float('salario', 8,2)->nullable();
+            $table->date('fecing')->nullable();
+            $table->date('fecegr')->nullable();
+            $table->unsignedInteger('cargo_id'); 
+            $table->foreign('cargo_id')->references('id')->on('cargos');            
             $table->timestamps();
         });
     }

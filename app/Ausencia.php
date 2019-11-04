@@ -14,7 +14,7 @@ class Ausencia extends Model
      * @var array
      */
     protected $fillable = [
-    	'fecfal', 'tipo', 'empleado_id', 'descripcion'
+    	'fecfal', 'tipo', 'empleado_id', 'observacion'
     ];
 
     /**

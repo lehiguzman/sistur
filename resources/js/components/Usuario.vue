@@ -32,14 +32,13 @@
                         <table class="table table-bordered table-striped table-sm">
                             <thead>
                                 <tr class="bg-primary">                                   
-                                    <th>Nombre</th>                                    
+                                    <th>Nombre</th>   
+                                    <th>Dirección</th>                                    
                                     <th>Teléfono</th>
-                                    <th>Email</th>
-                                    <th>Usuario</th>
+                                    <th>Email</th>                                    
                                     <th>Rol</th>
                                     <th>Imagen</th>
-                                    <th>Editar</th>
-                                    <th>Estado</th>
+                                    <th>Editar</th>                                    
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -47,8 +46,7 @@
                                     <td v-text="usuario.nombre"></td>                                    
                                     <td v-text="usuario.direccion"></td>
                                     <td v-text="usuario.telefono"></td>
-                                    <td v-text="usuario.email"></td>
-                                    <td v-text="usuario.usuario"></td>
+                                    <td v-text="usuario.email"></td>                                    
                                     <td v-text="usuario.rol"></td>
                                     <td>
                                         <img :src="'img/usuario/' + usuario.imagen" class="img-responsive" width="100px" height="100px">
@@ -57,19 +55,7 @@
                                         <button type="button" class="btn btn-info btn-md" @click="abrirModal('usuario', 'actualizar', usuario )">
                                           <i class="fa fa-edit fa-2x"></i> Editar
                                         </button> &nbsp;
-                                    </td>
-                                    <td>    
-                                        <template v-if="usuario.condicion">
-                                            <button type="button" class="btn btn-success btn-sm" @click="desactivarUsuario(usuario.id)">
-                                                <i class="fa fa-unlock fa-2x"></i> Activado
-                                            </button>
-                                        </template>  
-                                        <template v-else>
-                                            <button type="button" class="btn btn-danger btn-sm" @click="activarUsuario(usuario.id)">
-                                                <i class="fa fa-lock fa-2x"></i> Desactivado
-                                            </button>
-                                        </template>                                           
-                                    </td>                                  
+                                    </td>                                                                      
                                 </tr>                               
                             </tbody>
                         </table>
@@ -118,17 +104,7 @@
                                     <div class="col-md-9">
                                         <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de usuario">
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de documento</label>
-                                    <div class="col-md-9">
-                                        <select v-model="tipo_documento" class="form-control">
-                                            <option value="DNI">DNI</option>
-                                            <option value="CEDULA">CEDULA</option>
-                                            <option value="PASS">PASS</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="email-input">Numero de documento</label>
                                     <div class="col-md-9">
@@ -156,9 +132,10 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Rol</label>
                                     <div class="col-md-9">
-                                        <select v-model="idrol" class="form-control">
-                                            <option value="0">Seleccione un rol</option>
-                                            <option v-for="rol in arrayRol" :key="rol.id" :value="rol.id" v-text="rol.nombre"></option>
+                                        <select v-model="rol" class="form-control">                                            
+                                            <option value="1">Administrador</option>
+                                            <option value="2">Gerente</option>
+                                            <option value="3">Empleado</option>
                                         </select>
                                     </div>
                                 </div>
@@ -184,13 +161,7 @@
                                                
                       
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="email-input">Usuario</label>
-                                    <div class="col-md-9">
-                                    <input type="text" v-model="usuario" class="form-control" placeholder="Ingrese usuario">
-                                    </div>                                    
-                                </div>
+                                </div>                                
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="password-input">Password</label>
                                     <div class="col-md-9">
@@ -243,15 +214,13 @@
         data() {
             return {
                 usuario_id:0,
-                nombre: '',
-                tipo_documento: 'CEDULA',
+                nombre: '',                
                 num_documento : '',
                 direccion : '',
                 telefono : '',
-                email : '',
-                usuario:'',
+                email : '',                
                 password:'',
-                idrol:0,
+                rol:0,
                 imagen: '',
                 arrayUsuario:[],
                 arrayRol:[],
@@ -307,14 +276,14 @@
             listarUsuario(page, buscar, criterio){
                 let me = this;
 
-                var url = '/user?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio;
+                var url = '/user';
 
                 axios.get(url).then(function (response) {
                     // handle success
-                    //console.log(response);
-                    var respuesta = response.data;
-                    me.arrayUsuario = respuesta.users.data;
-                    me.pagination = respuesta.pagination;                
+                    console.log(response);
+                    //var respuesta = response.data;
+                    me.arrayUsuario = response.data;
+                    //me.pagination = respuesta.pagination;                
                   })
                   .catch(function (error) {
                     // handle error
@@ -323,27 +292,7 @@
                   .finally(function () {
                     // always executed
                   });
-            },
-
-            selectRol() {
-                let me = this;
-
-                var url = '/rol/selectRol';
-
-                axios.get(url).then(function (response) {
-                    // handle success
-                    //console.log(response);
-                    var respuesta = response.data;
-                    me.arrayRol = respuesta.roles;                    
-                  })
-                  .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                  })
-                  .finally(function () {
-                    // always executed
-                  });
-            },
+            },           
 
             cambiarPagina(page, buscar, criterio){
                 let me = this;
@@ -358,15 +307,13 @@
                 }
                 let me=this;
                 axios.post('/user/registrar', {
-                        'nombre':me.nombre,
-                        'tipo_documento':me.tipo_documento,
+                        'nombre':me.nombre,                        
                         'num_documento':me.num_documento,
                         'direccion':me.direccion,
                         'telefono':me.telefono,
-                        'email':me.email,
-                        'usuario':me.usuario,
+                        'email':me.email,                        
                         'password':me.password,
-                        'idrol':me.idrol, 
+                        'rol':me.rol, 
                         'imagen': me.imagen                     
                     }).then(function (response) {
                         me.cerrarModal();
@@ -384,15 +331,13 @@
                 let me=this;
                 axios.put('/user/actualizar', {
                         'id':me.usuario_id,
-                        'nombre':me.nombre,
-                        'tipo_documento':me.tipo_documento,
+                        'nombre':me.nombre,                        
                         'num_documento':me.num_documento,
                         'direccion':me.direccion,
                         'telefono':me.telefono,
-                        'email':me.email,
-                        'usuario':me.usuario,
+                        'email':me.email,                        
                         'password':me.password,
-                        'idrol':me.idrol,
+                        'rol':me.rol,
                         'imagen': me.imagen
                     }).then(function (response) {
                         me.cerrarModal();
@@ -410,19 +355,17 @@
                 if(!this.nombre){
                     this.errorMostrarMsjUsuario.push("(*) El nombre del usuario no puede estar vacio");
                 }
-                if(!this.usuario){
-                    this.errorMostrarMsjUsuario.push("(*) El usuario no puede estar vacio");
+                if(!this.email){
+                    this.errorMostrarMsjUsuario.push("(*) El email no puede estar vacio");
                 }
 
                 if(!this.password){
                     this.errorMostrarMsjUsuario.push("(*) El password no puede estar vacio");
                 }
 
-                if(this.idrol == 0){
+                if(this.rol == 0){
                     this.errorMostrarMsjUsuario.push("(*) Debe selecionar un rol");
-                }
-
-                if(!this.imagen) this.errorMostrarMsjUsuario.push("(*)Debe subir una imagen");
+                }                
 
                 if(this.errorMostrarMsjUsuario.length) this.errorUsuario=1;
                 return this.errorUsuario;
@@ -450,21 +393,18 @@
             cerrarModal() { 
                 this.modal = 0;
                 this.tituloModal = "";
-                this.nombre = "";
-                this.tipo_documento = "";
+                this.nombre = "";                
                 this.num_documento = "";
                 this.direccion = "";
                 this.telefono = "";
-                this.email = "";
-                this.usuario = "";
+                this.email = "";                
                 this.password = "";
-                this.idrol = 0;
+                this.rol = 0;
                 this.imagen = "";
                 this.errorUsuario = 0;
             },
 
-            abrirModal(modelo, accion, data=[]) {
-                this.selectRol();
+            abrirModal(modelo, accion, data=[]) {                
                 switch(modelo) {
                     case "usuario": {
                         switch(accion){
@@ -472,15 +412,13 @@
                                 this.modal = 1;
                                 this.tipoAccion = 1;
                                 this.tituloModal="Registrar Usuario"
-                                this.nombre = "";
-                                this.tipo_documento = "CEDULA";
+                                this.nombre = "";                                
                                 this.num_documento = "";
                                 this.direccion = "";
                                 this.telefono = "";
-                                this.email = "";
-                                this.usuario = "";
+                                this.email = "";                                
                                 this.password = "";
-                                this.idrol = 0;
+                                this.rol = 0;
                                 break;
                             }
                             case "actualizar": {
@@ -488,15 +426,13 @@
                                 this.tipoAccion=2;
                                 this.tituloModal = "Editar Proveedor";                                
                                 this.usuario_id = data["id"];
-                                this.nombre = data["nombre"];;
-                                this.tipo_documento = data["tipo_documento"];
+                                this.nombre = data["nombre"];                                
                                 this.num_documento = data["num_documento"];
                                 this.direccion = data["direccion"];
                                 this.telefono = data["telefono"];
-                                this.email = data["email"];
-                                this.usuario = data["usuario"];
+                                this.email = data["email"];                                
                                 this.password = data["password"];
-                                this.idrol = data["idrol"];
+                                this.rol = data["rol"];
                                 break;
                             }
                         }

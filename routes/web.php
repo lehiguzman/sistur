@@ -21,6 +21,7 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 //Institucion
 Route::get('/institucion', 'InstitucionController@index');
 Route::post('/institucion/registrar', 'InstitucionController@store');
+Route::put('/institucion/actualizar', 'InstitucionController@update');
 
 //Tipos de institucion
 Route::get('/tipo', 'TipoController@index');
@@ -71,7 +72,7 @@ Route::delete('/objetivo/eliminar/{id}', 'ObjetivoController@destroy');
 Route::get('/objetivo/obtenerCabecera', 'ObjetivoController@obtenerCabecera');
 Route::get('/objetivo/obtenerDetalles', 'ObjetivoController@obtenerDetalles');
 Route::get('/objetivo/selectObjetivo', 'ObjetivoController@selectObjetivo');
-Route::get('/objetivo/selectObjetivoEmpleado', 'ObjetivoController@selectObjetivoEmpleado');
+Route::get('/objetivo/selectObjetivoEmpleado/{objetivo_id}', 'ObjetivoController@selectObjetivoEmpleado');
 Route::post('/objetivo/registrarObjetivoEmpleado', 'ObjetivoController@registrarObjetivoEmpleado');
 
 //Curso
@@ -82,7 +83,7 @@ Route::delete('/curso/eliminar/{id}', 'CursoController@destroy');
 Route::get('/curso/obtenerCabecera', 'CursoController@obtenerCabecera');
 Route::get('/curso/obtenerDetalles', 'CursoController@obtenerDetalles');
 Route::get('/curso/selectCurso', 'CursoController@selectCurso');
-Route::get('/curso/selectCursoEmpleado', 'CursoController@selectCursoEmpleado');
+Route::get('/curso/selectCursoEmpleado/{curso_id}', 'CursoController@selectCursoEmpleado');
 Route::post('/curso/registrarCursoEmpleado', 'CursoController@registrarCursoEmpleado');
 
 //Cuestionario
@@ -93,4 +94,8 @@ Route::delete('/cuestionario/eliminar/{id}', 'CuestionarioController@destroy');
 Route::get('/cuestionario/obtenerCabecera', 'CuestionarioController@obtenerCabecera');
 Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetalles');
 
+//Usuario
+Route::get('/user', 'UserController@index');
+Route::post('/user/registrar', 'UserController@store');
+Route::put('/user/actualizar', 'UserController@update');
 Auth::routes();

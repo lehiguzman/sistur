@@ -15,10 +15,29 @@ class ObjetivoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $objetivos = Objetivo::all();
-        return $objetivos;
+            $buscar = $request->buscar;
+            $criterio = $request->criterio;
+
+            if($buscar == '') {
+                $objetivos = Objetivo::orderBy('id', 'DESC')->paginate(10);
+            } else {
+                $objetivos = Objetivo::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $objetivos->total(),
+                'current_page' => $objetivos->currentPage(),
+                'per_page' => $objetivos->perPage(),
+                'last_page' => $objetivos->lastPage(),
+                'from' => $objetivos->firstItem(),
+                'to' => $objetivos->lastItem(),
+            ],
+
+            'objetivos' => $objetivos
+        ];
     }
 
     public function obtenerCabecera(Request $request){
@@ -110,11 +129,24 @@ class ObjetivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function selectObjetivoEmpleado(Request $request)
+    public function selectObjetivoEmpleado(Request $request, $objetivo_id)
     {
         //if(!$request->ajax()) return redirect('/');
-        $empleados = Empleado::all();
-        return ['empleados' => $empleados ];
+        $empleadosAll = Empleado::all();                
+        $objetivo = Objetivo::find($objetivo_id);        
+        
+        $empleados_objetivo = $objetivo->empleados;
+        $arrayEmpleados = [];
+
+        foreach ($objetivo->empleados as $emp) {
+            $arrayEmpleados[] = $emp->id;
+        }
+
+        $empleados = DB::table('empleados')
+                    ->whereNotIn('id', $arrayEmpleados)
+                    ->get();
+        
+        return [ 'empleados' => $empleados ];
     }
 
     /**

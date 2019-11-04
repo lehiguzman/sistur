@@ -21,10 +21,10 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <select class="form-control col-md-3" v-model="criterio">
-                                    <option value="nombre">Cuestionario</option>
+                                    <option value="titulo">Cuestionario</option>
                                 </select>
-                                <input type="text" @keyup.enter="listarCuestionario();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                <button type="submit"  @click="listarCuestionario();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" @keyup.enter="listarCuestionario(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                <button type="submit"  @click="listarCuestionario(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" @click="" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
+                            <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                             <button type="button" @click="registrarCuestionario()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>
                         </div>
                 </template>
@@ -276,7 +276,7 @@
                     'from' : 0,
                     'to' : 0,
                 },
-                criterio: 'nombre',
+                criterio: 'titulo',
                 buscar: '',
 
                 //modal
@@ -323,27 +323,39 @@
             //Modulo
             listarCuestionario(page, buscar, criterio) {
                 let me = this; 
-                var url = '/cuestionario';
+                var url = '/cuestionario?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    me.cuestionarios = response.data;
+                    
+                    var respuesta = response.data;
+                    me.cuestionarios = respuesta.cuestionarios.data;
+
                 });                               
             },
 
             registrarCuestionario(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarCuestionario()) {
                     return;
                 }
+
                 let me=this;
                 axios.post('/cuestionario/registrar', {
                         'titulo':me.titulo,  
                         'institucion_id':5,
                         'data': me.arrayDetalle                    
                     }).then(function (response) {
+                        alerta.fire("Cuestionario registrado exitosamente");
                         me.listado = 1;
                         me.titulo='';
                         me.arrayDetalle= [];
-                        me.listarCuestionario(1, '', 'nombre');
+                        me.listarCuestionario(1, '', 'titulo');
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -392,7 +404,7 @@
                   title: '¿Estás seguro de eliminar el Cuestionario?',
                   //type: 'warning',
                   showCancelButton: true,
-                  confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
+                  confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar ',
                   cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
                   reverseButtons: true
                 }).then((result) => {
@@ -401,7 +413,7 @@
                     let me=this;
                         axios.delete('/cuestionario/eliminar/'+id).then(function (response) {  
                                 //console.log( response );
-                                me.listarCuestionario(1, '', 'nombre');
+                                me.listarCuestionario(1, '', 'titulo');
                                 swalWithBootstrapButtons.fire(
                                     'Eliminado!',
                                     'Cuestionario eliminado.',
@@ -444,6 +456,10 @@
             },          
 
             agregarDetalle() {
+                if(this.validarDetalle()) {
+                    return;
+                }
+
                 let me = this;
 
                 me.arrayDetalle.push({ 
@@ -458,6 +474,27 @@
             eliminarDetalle(index) {                
                 let me = this;
                 me.arrayDetalle.splice(index, 1);
+            },
+
+            validarDetalle() {
+                this.errorCuestionario=0;
+                this.errorMostrarMsjCuestionario=[];
+
+                if(!this.pregunta){
+                    this.errorMostrarMsjCuestionario.push("(*) La pregunta no puede estar vacia");
+                }
+
+                if(!this.tipo){
+                    this.errorMostrarMsjCuestionario.push("(*) Debe seleccionar tipo de pregunta");
+                }
+
+                if(this.errorMostrarMsjCuestionario.length) this.errorCuestionario=1;
+                return this.errorCuestionario;
+
+            },
+
+            salir() {
+                this.listado = 1;
             },
 
             //Paginacion

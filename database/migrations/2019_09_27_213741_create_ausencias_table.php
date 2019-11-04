@@ -19,7 +19,7 @@ class CreateAusenciasTable extends Migration
             $table->integer('tipo');
             $table->unsignedInteger('empleado_id'); 
             $table->foreign('empleado_id')->references('id')->on('empleados'); 
-            $table->string('descripcion');
+            $table->string('observacion')->nullable();
             $table->timestamps();
         });
     }

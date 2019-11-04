@@ -20,10 +20,10 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Cargo</option>
+                                        <option value="titulo">Cargo</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarCargo();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarCargo();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarCargo(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarCargo(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,8 @@
                                 <tr class="bg-primary">                                   
                                     <th>Cargo</th>
                                     <th>Descripción</th>
-                                    <th>Editar</th>                                    
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>                                   
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -166,7 +167,7 @@
                     'from' : 0,
                     'to' : 0,
                 },
-                criterio: 'nombre',
+                criterio: 'titulo',
                 buscar: '',
 
                 //modal
@@ -209,24 +210,36 @@
             //Modulo
             listarCargo(page, buscar, criterio) {
                 let me = this; 
-                var url = '/cargo';
+                var url = '/cargo?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    me.cargos = response.data;
+                    
+                    var respuesta = response.data;
+                    me.cargos = respuesta.cargos.data;
+
                 });                               
             },
 
             registrarCargo(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarCargo()) {
                     return;
                 }
+
                 let me=this;
                 axios.post('/cargo/registrar', {
                         'titulo':me.titulo,
                         'descripcion':me.descripcion,
                     }).then(function (response) {
+                        alerta.fire("Cargo registrado exitosamente");
                         me.cerrarModal();
-                        me.listarCargo(1, '', 'nombre');
+                        me.listarCargo(1, '', 'titulo');
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -234,18 +247,26 @@
             },
 
             actualizarCargo(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarCargo()) {
                     return;
                 }
+
                 let me=this;
                 axios.put('/cargo/actualizar', {
                         'id':me.cargo_id,
                         'titulo':me.titulo,
                         'descripcion':me.descripcion,
                     }).then(function (response) {
-                        //console.log( response );
+                        alerta.fire("Cargo editado exitosamente");
                         me.cerrarModal();
-                        me.listarCargo(1, '', 'nombre');
+                        me.listarCargo(1, '', 'titulo');
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -274,7 +295,7 @@
                     let me=this;
                         axios.delete('/cargo/eliminar/'+id).then(function (response) {  
                                 //console.log( response );
-                                me.listarCargo(1, '', 'nombre');
+                                me.listarCargo(1, '', 'titulo');
                                 swalWithBootstrapButtons.fire(
                                     'Eliminado!',
                                     'Cargo eliminado.',
@@ -313,7 +334,8 @@
                                 this.modal = 1;
                                 this.tituloModal="Registrar cargo";
                                 this.tipoAccion = 1;
-                                this.nombre = "";                                
+                                this.titulo = "";                                
+                                this.descripcion = "";                                
                                 break;
                             }
                             case "actualizar": {
@@ -332,7 +354,8 @@
 
             cerrarModal() { 
                 this.modal = 0;
-                this.nombre = "";                
+                this.titulo = "";
+                this.descripcion = "";            
                 this.tituloModal = "";
             },
 

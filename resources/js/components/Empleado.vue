@@ -27,10 +27,10 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Empleado</option>
+                                        <option value="nombre">Nombre</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarEmpleado();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarEmpleado();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarEmpleado(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarEmpleado(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                                 <tbody v-else>
                                     <tr>
                                         <td colspan="6">
-                                            No se ha seleccionado curso
+                                            No se ha seleccionado empleado
                                         </td>
                                     </tr>
                                 </tbody> 
@@ -154,7 +154,7 @@
                                 <!--la variable idcategoria asociado a v-model la asignamos
                                 en la propiedad data en javascript (ver al final) -->
 
-                                <select class="form-control" v-model="objetivo_id" @change="selectEmpleados(objetivo_id)">
+                                <select class="form-control" v-model="objetivo_id" @change="selectObjetivoEmpleado()">
                                   
                                   <!-- el id y nombre asociado en el objeto categoria vienen de los campos
                                   de la tabla categorias de la bd-->
@@ -248,17 +248,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Telefono Local</label>
-                                    <div class="col-md-9">
-                                        <input type="text" v-model="telefono" class="form-control" placeholder="Telefono local del empleado">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Telefono movil</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="movil" class="form-control" placeholder="Telefono movil del empleado">
                                     </div>
                                 </div> 
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Telefono Local</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="telefono" class="form-control" placeholder="Telefono local del empleado">
+                                    </div>
+                                </div>                                
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Dirección</label>
                                     <div class="col-md-9">
@@ -432,14 +432,24 @@
             //Modulo
             listarEmpleado(page, buscar, criterio) {
                 let me = this; 
-                var url = '/empleado';
+                var url = '/empleado?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    me.empleados = response.data;                    
+                    
+                    var respuesta = response.data;
+                    me.empleados = respuesta.empleados.data;
+
                 });                               
             },
 
             registrarEmpleado(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarEmpleado()) {
                     return;
                 }
@@ -455,8 +465,9 @@
                         'fecing':me.fecing,
                         'fecegr':me.fecegr,
                         'cargo_id':me.cargo_id,
-                        'institucion_id':me.institucion_id,
+                        'institucion_id':5//me.institucion_id,
                     }).then(function (response) {
+                        alerta.fire("Empleado registrada exitosamente");
                         me.cerrarModal();
                         me.listarEmpleado(1, '', 'nombre');
                     }).catch(function (error) {
@@ -466,6 +477,13 @@
             },
 
             actualizarEmpleado(){
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
+
                 if(this.validarEmpleado()) {
                     return;
                 }
@@ -482,9 +500,9 @@
                         'fecing':me.fecing,
                         'fecegr':me.fecegr,
                         'cargo_id':me.cargo_id,
-                        'institucion_id':me.institucion_id,
+                        'institucion_id': 5//me.institucion_id,
                     }).then(function (response) {
-                        //console.log( response );
+                        alerta.fire("Empleado editado exitosamente");
                         me.cerrarModal();
                         me.listarEmpleado(1, '', 'nombre');
                     }).catch(function (error) {
@@ -546,11 +564,15 @@
                 }
 
                 if(!this.email){
-                    this.errorMostrarMsjEmpleado.push("(*) El email no puede estar vacio");
+                    this.errorMostrarMsjEmpleado.push("(*) El correo no puede estar vacio");
                 }
 
                 if(!this.telefono){
-                    this.errorMostrarMsjEmpleado.push("(*) El telefono no puede estar vacia");
+                    this.errorMostrarMsjEmpleado.push("(*) El telefono movil no puede estar vacio");
+                }                
+
+                if(!this.cargo_id){
+                    this.errorMostrarMsjEmpleado.push("(*) Debe seleccionar un cargo");
                 }
 
                 if(this.errorMostrarMsjEmpleado.length) this.errorEmpleado=1;
@@ -650,7 +672,8 @@
             },
 
             salir() {
-                this.curso_id= 0;
+                this.listarEmpleado(1, this.buscar, this.criterio);
+                //this.curso_id= 0;
                 this.listado = 1;
             },
 
@@ -665,12 +688,14 @@
             listarCursoEmpleado() {
                 let me = this;
 
-                var url = '/curso/selectCursoEmpleado';
-
+                var url = '/curso/selectCursoEmpleado/'+me.curso_id;
+                    
                 axios.get(url).then(function (response) {
-                    // handle success                    
+                    // handle success  
+                    
                     var respuesta = response.data;
-                    me.empleados = respuesta.empleados;                      
+                    me.empleados = respuesta.empleados;   
+                    console.log("Empleado : ", me.empleados);
                   })
                   .catch(function (error) {
                     // handle error
@@ -683,20 +708,40 @@
             },
 
             registrarCursoEmpleados() {
-                let me = this;
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
 
-                var url = '/curso/registrarCursoEmpleado';
-                    console.log(me.checkEmpleado);
-                axios.post(url, {
-                    'id':me.curso_id,
-                    data: me.checkEmpleado,
-                }).then(function (response) {                        
-                    console.log(response);
-                    //me.salir();
-                }).catch(function (error) {
-                // handle error
-                console.log(error);
-                });
+                let me = this;
+                let empleadosCheck = me.checkEmpleado.length;
+
+                if(empleadosCheck > 0) {
+                    console.log("Checks : "+me.checkEmpleado.length);
+                    var url = '/curso/registrarCursoEmpleado';
+                
+                    axios.post(url, {
+                        'id':me.curso_id,
+                        data: me.checkEmpleado,
+                    }).then(function (response) {                        
+                        console.log(response);
+                        Swal.fire(                       
+                            'Curso asignado con exito!'                        
+                            )
+                        me.salir();
+                    }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    });
+                } else {
+                    alerta.fire(
+                        'Error!',
+                        'Debe seleccionar al menos un empleado',
+                        'error'
+                    );                            
+                }                
             },           
 
             //Curso
@@ -706,7 +751,8 @@
                 var url = '/curso/selectCurso';
 
                 axios.get(url).then(function (response) {
-                    // handle success                    
+                    // handle success   
+                    console.log(response)                 
                     var respuesta = response.data;
                     me.arrayCurso = respuesta.cursos;                      
                   })
@@ -735,7 +781,7 @@
         listarObjetivoEmpleado() {
                 let me = this;
 
-                var url = '/objetivo/selectObjetivoEmpleado';
+                var url = '/objetivo/selectObjetivoEmpleado/'+me.objetivo_id;
 
                 axios.get(url).then(function (response) {
                     // handle success                    
@@ -753,20 +799,40 @@
         },
 
         registrarObjetivoEmpleados() {
-                let me = this;
+                 const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',                    
+                  },
+                 buttonsStyling: false,
+                })
 
-                var url = '/objetivo/registrarObjetivoEmpleado';
-                    console.log(me.checkEmpleado);
-                axios.post(url, {
-                    'id':me.objetivo_id,
-                    data: me.checkEmpleado,
-                }).then(function (response) {                        
-                    console.log(response);
-                    //me.salir();
-                }).catch(function (error) {
-                // handle error
-                console.log(error);
-                });
+                let me = this;
+                let empleadosCheck = me.checkEmpleado.length;
+
+                if(empleadosCheck > 0) {
+                    console.log("Checks : "+me.checkEmpleado.length);
+                    var url = '/objetivo/registrarObjetivoEmpleado';
+                
+                    axios.post(url, {
+                        'id':me.objetivo_id,
+                        data: me.checkEmpleado,
+                    }).then(function (response) {                        
+                        console.log(response);
+                        Swal.fire(                       
+                            'Objetivo asignado con exito!'                        
+                            )
+                        me.salir();
+                    }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    });
+                } else {
+                    alerta.fire(
+                        'Error!',
+                        'Debe seleccionar al menos un empleado',
+                        'error'
+                    );                            
+                }                
             },
 
         selectObjetivo() {
@@ -785,8 +851,11 @@
                   })
                   .finally(function () {
                     // always executed
-                  });
+                  });                  
             },  
+        selectObjetivoEmpleado() {
+            this.listarObjetivoEmpleado();
+        }
 ////////////////////////////////////////////////////////////////////////////////////////////
         },
 
