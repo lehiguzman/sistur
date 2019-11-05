@@ -38,7 +38,7 @@
 	</template>	
 	<template v-if="menu==11">
 	    <usuario></usuario>
-	</template>	
+	</template>
 @elseif(Auth::user()->rol == 2)
 	<template v-if="menu==11">
 	    <usuario></usuario>
@@ -61,6 +61,24 @@
 	<template v-if="menu==10">
 	    <cuestionario></cuestionario>
 	</template>
-	@else
+@elseif(Auth::user()->rol == 3)
+	<template v-if="menu==0">
+	    <dashboard></dashboard>
+	</template>	
+	<template v-if="menu==6">
+	    <empleado></empleado>
+	</template>
+	<template v-if="menu==7">
+	    <ausencia></ausencia>
+	</template>	
+	<template v-if="menu==8">
+	    <objetivo></objetivo>
+	</template>	
+	<template v-if="menu==9">
+	    <curso></curso>
+	</template>
+	<template v-if="menu==10">
+	    <cuestionario></cuestionario>
+	</template>
 	@endif		
 @endsection

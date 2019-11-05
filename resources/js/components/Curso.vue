@@ -95,7 +95,7 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="text-uppercase"><strong>Fecha de inicio(*)</strong></label>
-                                    <input type="text" class="form-control" v-model="fecini" placeholder="">
+                                    <datepicker bootstrap-styling v-model="fecini" :format="formatoFecha" placeholder="Fecha de inicio"></datepicker>
                                 </div>
                             </div>                           
 
@@ -156,7 +156,7 @@
                 
 
                 <br/><br/>
-
+                    <div class="card-body">
                         <div class="form-group row border">
 
                             <h3>Lista de Contenidos del Curso</h3>
@@ -193,7 +193,7 @@
                                 </table>
                             </div>
                         </div>
-
+                    </div>
                         <div class="modal-footer">
                             <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                             <button type="button" @click="registrarCurso()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>
@@ -316,6 +316,9 @@
 </style>
 
 <script>
+    import Datepicker from 'vuejs-datepicker';
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -358,6 +361,10 @@
             }            
         },
 
+        components: {
+            Datepicker
+        },
+
         computed: {
             pagesNumber: function(){
                 if(!this.pagination.to){
@@ -384,6 +391,13 @@
         },
 
         methods: {
+
+            formatoFecha(date) {
+                
+                return moment(date).format('DD/MM/YYYY');
+
+            },
+
             //Modulo
             listarCurso(page, buscar, criterio) {
                 let me = this; 
@@ -408,10 +422,13 @@
                 if(this.validarCurso()) {
                     return;
                 }
+
                 let me=this;
+                let fecini = moment( me.fecini ).format("YYYY-MM-DD");
+
                 axios.post('/curso/registrar', {
                         'nombre':me.nombre,
-                        'fecini':me.fecini,
+                        'fecini':fecini,
                         'duracion':me.duracion,
                         'cupos':me.cupos,
                         'descripcion':me.descripcion,

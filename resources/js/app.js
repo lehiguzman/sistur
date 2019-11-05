@@ -31,6 +31,7 @@ Vue.component('objetivo', require('./components/Objetivo.vue').default);
 Vue.component('curso', require('./components/Curso.vue').default);
 Vue.component('cuestionario', require('./components/Cuestionario.vue').default);
 Vue.component('usuario', require('./components/Usuario.vue').default);
+Vue.component('reporte', require('./components/Reporte.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

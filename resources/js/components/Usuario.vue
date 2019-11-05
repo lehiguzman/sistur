@@ -20,9 +20,8 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Nombre</option>                                        
-                                        <option value="email">Email</option>
-                                        <option value="telefono">Telefono</option>
+                                        <option value="nombre">Nombre</option>                                       
+                                        <option value="email">Email</option>                                        
                                     </select>
                                     <input type="text" @keyup.enter="listarUsuario(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
                                     <button type="submit" @click="listarUsuario(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -129,11 +128,31 @@
                                     <input type="text" v-model="email" class="form-control" placeholder="Ingrese email">
                                     </div>                                    
                                 </div>
+                                <div class="form-group row" v-if="user_rol == 1">
+                                    <label class="col-md-3 form-control-label" for="text-input">Empresa</label>
+                                    <div class="col-md-9">
+                                
+                                        <!--la variable idcategoria asociado a v-model la asignamos
+                                        en la propiedad data en javascript (ver al final) -->
+
+                                    <select class="form-control" v-model="empresa_id" @change="selectEmpresa()">
+                                  
+                                      <!-- el id y nombre asociado en el objeto categoria vienen de los campos
+                                      de la tabla categorias de la bd-->
+                                      <option value="0" disabled>Seleccione</option>
+                                      <!--el arrayCategoria es una variable de la data javascript de vue 
+                                      y se cargan los registros de la categoria una vez se abra la ventana
+                                      modal-->
+                                      <option v-for="empresa in arrayEmpresa" :key="empresa.id" :value="empresa.id" v-text="empresa.nombre"></option>
+
+                                    </select>                               
+                                </div>
+                            </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Rol</label>
                                     <div class="col-md-9">
                                         <select v-model="rol" class="form-control">                                            
-                                            <option value="1">Administrador</option>
+                                            <option value="1" v-if="user_rol == 1">Administrador</option>
                                             <option value="2">Gerente</option>
                                             <option value="3">Empleado</option>
                                         </select>
@@ -213,6 +232,7 @@
     export default {        
         data() {
             return {
+                users: [],
                 usuario_id:0,
                 nombre: '',                
                 num_documento : '',
@@ -222,8 +242,11 @@
                 password:'',
                 rol:0,
                 imagen: '',
+                arrayEmpresa: [],
+                empresa_id: 0,
                 arrayUsuario:[],
                 arrayRol:[],
+                user_rol: 0,
                 modal:0, //0=Modal abierto / 1=Modal cerrado
                 tituloModal:'',
                 tipoAccion:'',
@@ -274,16 +297,20 @@
 
         methods: {
             listarUsuario(page, buscar, criterio){
+
                 let me = this;
 
-                var url = '/user';
+                var url = '/user?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then(function (response) {
-                    // handle success
-                    console.log(response);
-                    //var respuesta = response.data;
-                    me.arrayUsuario = response.data;
-                    //me.pagination = respuesta.pagination;                
+
+                    var respuesta = response.data;
+                    me.arrayUsuario = respuesta.users.data;
+                    me.institucion_id = respuesta.institucion_id;
+                    me.user_rol = respuesta.user_rol;
+
+                    console.log("Rol : ", me.user_rol);
+
                   })
                   .catch(function (error) {
                     // handle error
@@ -302,16 +329,25 @@
             },
 
             registrarUsuario(){
+                let empresaId;
                 if(this.validarUsuario()) {
                     return;
                 }
                 let me=this;
+                if(me.user_rol == 1) {
+                    empresaId = me.empresa_id;
+                } else {
+                    empresaId = me.institucion_id;
+                }
+
+                console.log("Empresa : ", empresaId);
                 axios.post('/user/registrar', {
                         'nombre':me.nombre,                        
                         'num_documento':me.num_documento,
                         'direccion':me.direccion,
                         'telefono':me.telefono,
-                        'email':me.email,                        
+                        'email':me.email,
+                        'institucion_id':me.institucion_id,
                         'password':me.password,
                         'rol':me.rol, 
                         'imagen': me.imagen                     
@@ -321,7 +357,7 @@
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
-                    });
+                    }); 
             },
 
             actualizarUsuario(){
@@ -361,6 +397,10 @@
 
                 if(!this.password){
                     this.errorMostrarMsjUsuario.push("(*) El password no puede estar vacio");
+                }
+
+                if(!this.empresa_id && this.user_rol == 1){
+                    this.errorMostrarMsjUsuario.push("(*) Debe seleccionar una empresa");
                 }
 
                 if(this.rol == 0){
@@ -438,6 +478,27 @@
                         }
                     }
                 }                
+            },
+
+            selectEmpresa() {                
+                let me = this;
+
+                var url = '/institucion';
+                    
+                axios.get(url).then(function (response) {
+                    // handle success                     
+                    var respuesta = response.data;
+                    me.arrayEmpresa = respuesta.instituciones.data;
+                    
+                  })
+                  .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                  })
+                  .finally(function () {
+                    // always executed
+                  });
+
             },
 
             desactivarUsuario(id){
@@ -523,9 +584,9 @@
                 })
             }
         },
-        mounted() {
-            this.listarUsuario(1, this.buscar, this.criterio);
-            //console.log('Component mounted.')
+        mounted() { 
+            this.selectEmpresa();
+            this.listarUsuario(1, this.buscar, this.criterio);            
         }
     }
 </script>  

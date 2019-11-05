@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class UserController extends Controller
 {
@@ -12,18 +13,19 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //if(!$request->ajax()) return redirect('/');
-            
-            /*$buscar = $request->buscar;
-            $criterio = $request->criterio;
+    public function index(Request $request)
+    {   
+         
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        $institucion_id = Auth::user()->institucion_id;
+        $user_rol = Auth::user()->rol;
 
             if($buscar == '') {
-                $users = User::join('roles', 'users.idrol', '=', 'roles.id')->select('users.id', 'users.nombre', 'users.tipo_documento', 'users.num_documento', 'users.direccion', 'users.telefono', 'users.email', 'users.usuario', 'users.password', 'users.condicion', 'users.idrol', 'users.imagen' , 'roles.nombre as rol')->orderBy('id', 'desc')->paginate(3);
+                $users = User::where('institucion_id', '=', $institucion_id)->orderBy('id', 'DESC')->paginate(10);
             } else {
-                $users = User::join('roles', 'users.idrol', '=', 'roles.id')->select('users.id', 'users.nombre', 'users.tipo_documento', 'users.num_documento', 'users.direccion', 'users.telefono', 'users.email', 'users.usuario', 'users.password', 'users.condicion', 'users.idrol', 'users.imagen', 'roles.nombre as rol')->where('users.'.$criterio, 'like', '%' . $buscar . '%')->orderBy('id', 'desc')->paginate(3);
-            }     
+                $users = User::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            }        
         
         return [
             'pagination' => [
@@ -35,10 +37,10 @@ class UserController extends Controller
                 'to' => $users->lastItem(),
             ],
 
-            'users' => $users
-        ]; */
-        $users = User::all();
-        return $users;
+            'users' => $users,
+            'institucion_id' => $institucion_id,
+            'user_rol' => $user_rol
+        ];
     }
 
     /**
@@ -57,7 +59,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->condicion = '1';
         $user->direccion = $request->direccion;   
-        $user->institucion_id = '5';   
+        $user->institucion_id = $request->institucion_id;   
         $user->password = bcrypt( $request->password );        
         $user->rol = $request->rol;
         if($request->imagen) {
@@ -146,5 +148,9 @@ class UserController extends Controller
         $user = User::findOrFail($request->id);
         $user->condicion = '1';
         $user->save();
+    }
+
+    public function user() {
+        return Auth::user();
     }
 }

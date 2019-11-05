@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Empleado;
+use Auth;
 
 class EmpleadoController extends Controller
 {
@@ -17,9 +18,10 @@ class EmpleadoController extends Controller
        
             $buscar = $request->buscar;
             $criterio = $request->criterio;
+            $institucion_id = Auth::user()->institucion_id;
 
             if($buscar == '') {
-                $empleados = Empleado::orderBy('id', 'DESC')->paginate(10);
+                $empleados = Empleado::where('institucion_id', '=', $institucion_id)->orderBy('id', 'DESC')->paginate(10);
             } else {
                 $empleados = Empleado::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
             }        
@@ -34,7 +36,8 @@ class EmpleadoController extends Controller
                 'to' => $empleados->lastItem(),
             ],
 
-            'empleados' => $empleados
+            'empleados' => $empleados,
+            'institucion_id' => $institucion_id
         ];
     }
 
@@ -109,7 +112,8 @@ class EmpleadoController extends Controller
     public function selectEmpleado(Request $request)
     {
         //if(!$request->ajax()) return redirect('/');
-        $empleados = Empleado::all();
+        $institucion_id = Auth::user()->institucion_id;
+        $empleados = Empleado::where('institucion_id', '=', $institucion_id)->get();
         return ['empleados' => $empleados ];
     }
 }

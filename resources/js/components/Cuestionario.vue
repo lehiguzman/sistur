@@ -100,18 +100,26 @@
 
                         <div class="form-group row border">
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <label>Pregunta <span class="text-error" >(*Ingrese Pregunta)</span></label>
-                                    <div class="form-inline">
-                                        <input type="text" class="form-control" v-model="pregunta" placeholder="Ingrese pregunta">                                        
+                                    <div>
+                                        <input type="text" class="form-control" v-model="pregunta" placeholder="Ingrese pregunta">
                                     </div>                                    
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">                                
                                 <div class="form-group">
                                     <label>Tipo de pregunta <span class="text-error">(*Ingrese tipo de pregunta)</span></label>
-                                    <input type="text" step="any" class="form-control" v-model="tipo">
+                                    <select class="form-control" v-model="tipo">
+                                          
+                                      <!-- el id y nombre asociado en el objeto categoria vienen de los campos
+                                      de la tabla categorias de la bd-->
+                                      <option disabled selected="selected">Seleccione</option>
+                                      <option value="1">Abierta</option>
+                                       <option value="2">Cerrada</option>
+                                          
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -125,7 +133,7 @@
                     </div>               
 
                 <br/><br/>
-
+                    <div class="card-body">
                         <div class="form-group row border">
 
                             <h3>Lista de preguntas del cuestionario</h3>
@@ -148,8 +156,12 @@
                                             </td>
                                             <td v-text="detalle.pregunta">
                                             </td>  
-                                            <td v-text="detalle.tipo">
-                                            </td>                                        
+                                            <td v-if="detalle.tipo == 1">
+                                                Abierta
+                                            </td>
+                                            <td v-if="detalle.tipo == 2">
+                                                Cerrada
+                                            </td>                                    
                                         </tr>                                        
                                     </tbody>
                                     <tbody v-else>
@@ -162,7 +174,7 @@
                                 </table>
                             </div>
                         </div>
-
+                    </div>
                         <div class="modal-footer">
                             <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                             <button type="button" @click="registrarCuestionario()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>

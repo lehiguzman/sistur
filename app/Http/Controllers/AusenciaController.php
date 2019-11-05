@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Ausencia;
+use App\Empleado;
 
 class AusenciaController extends Controller
 {
@@ -12,10 +13,29 @@ class AusenciaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ausencias = Ausencia::all();
-        return $ausencias;
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        
+            if($buscar == '') {
+                $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->select('empleados.nombre', 'ausencias.id', 'ausencias.fecfal', 'ausencias.tipo', 'ausencias.empleado_id')->paginate(10);
+            } else {
+                $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->where('empleados.'.$criterio, 'like', '%'.$buscar.'%')->orderBy('empleados.id', 'DESC')->paginate(10);
+            }        
+        
+        return [
+            'pagination' => [
+                'total' => $ausencias->total(),
+                'current_page' => $ausencias->currentPage(),
+                'per_page' => $ausencias->perPage(),
+                'last_page' => $ausencias->lastPage(),
+                'from' => $ausencias->firstItem(),
+                'to' => $ausencias->lastItem(),
+            ],
+
+            'ausencias' => $ausencias,            
+        ];
     }
 
     /**

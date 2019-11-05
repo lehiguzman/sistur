@@ -34,7 +34,7 @@
 
             <li @click="menu=11" class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Usuarios</font></a>
-            </li>                 
+            </li>            
         </ul>
     </nav>
     <button class="sidebar-minimizer brand-minimizer" type="button"></button>

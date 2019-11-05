@@ -20,10 +20,10 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
-                                        <option value="nombre">Ausencia</option>
+                                        <option value="nombre">Nombre</option>
                                     </select>
-                                    <input type="text" @keyup.enter="listarAusencia();" class="form-control" placeholder="Buscar texto" v-model="buscar">
-                                    <button type="submit"  @click="listarAusencia();" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" @keyup.enter="listarAusencia(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
+                                    <button type="submit"  @click="listarAusencia(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -40,9 +40,10 @@
                             <tbody>                               
                                 <tr v-for="ausencia in ausencias" :key="ausencia.id">
                                     
-                                    <td v-text="ausencia.empleado_id"></td> 
+                                    <td v-text="ausencia.nombre"></td> 
                                     <td v-text="ausencia.fecfal"></td>                                  
-                                    <td v-text="ausencia.tipo"></td>                                  
+                                    <td v-if="ausencia.tipo == 1">Medio dia</td>
+                                    <td v-if="ausencia.tipo == 2">Dia completo</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-md" @click="abrirModal( 'ausencia', 'actualizar', ausencia )">
                                           <i class="fa fa-edit fa-2x"></i> Editar
@@ -120,9 +121,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Fecha </label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Fecha</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="fecfal" class="form-control" placeholder="Fecha de la ausencia">
+                                        <datepicker bootstrap-styling v-model="fecfal" :format="formatoFecha" placeholder="Fecha de la ausencia"></datepicker>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -147,7 +148,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Observacion </label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="Observacion" class="form-control" placeholder="Observación">
+                                        <input type="text" v-model="observacion" class="form-control" placeholder="Observación">
                                     </div>
                                 </div>                            
                             </form>
@@ -192,6 +193,9 @@
 </style>
 
 <script>
+    import Datepicker from 'vuejs-datepicker';
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -253,14 +257,28 @@
             }
         },
 
+        components: {
+            Datepicker
+        },
+
         methods: {
+
+            formatoFecha(date) {
+                
+                return moment(date).format('DD/MM/YYYY');
+
+            },
+
             //Modulo
             listarAusencia(page, buscar, criterio) {
                 let me = this; 
-                var url = '/ausencia';
+                var url = '/ausencia?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    me.ausencias = response.data;                    
+                    
+                    var respuesta = response.data;
+                    me.ausencias = respuesta.ausencias.data;
+                    
                 });                               
             },
 
@@ -276,8 +294,9 @@
                     return;
                 }
                 let me=this;
+                let fecfal = moment( me.fecfal ).format("YYYY-MM-DD");
                 axios.post('/ausencia/registrar', {
-                        'fecfal':me.fecfal,
+                        'fecfal':fecfal,
                         'tipo':me.tipo,
                         'observacion':me.observacion,
                         'empleado_id':me.empleado_id,
@@ -298,9 +317,11 @@
                     return;
                 }
                 let me=this;
+                let fecfal = moment( me.fecfal ).format("YYYY-MM-DD");
+
                 axios.put('/ausencia/actualizar', {
                         'id':me.ausencia_id,
-                        'fecfal':me.fecfal,
+                        'fecfal':fecfal,
                         'tipo':me.tipo,                        
                         'observacion':me.observacion,
                         'empleado_id':me.empleado_id,
@@ -335,7 +356,7 @@
                         
                     let me=this;
                         axios.delete('/ausencia/eliminar/'+id).then(function (response) {  
-                                //console.log( response );
+                                console.log( response );
                                 me.listarAusencia(1, '', 'nombre');
                                 swalWithBootstrapButtons.fire(
                                     'Eliminado!',
@@ -431,7 +452,7 @@
 
                 axios.get(url).then(function (response) {
                     // handle success
-                    console.log(response);
+                    console.log("respuesta : ", response);
                     var respuesta = response.data;
                     me.arrayEmpleado = respuesta.empleados;                    
                   })

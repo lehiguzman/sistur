@@ -195,19 +195,32 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de inicio</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="fecini" class="form-control" placeholder="Fecha de inicio">
+                                        <datepicker bootstrap-styling v-model="fecini" :format="formatoFecha" placeholder="Fecha de inicio"></datepicker>
                                     </div>
                                 </div> 
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de finalización</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="fecfin" class="form-control" placeholder="Fecha de finalización">
+                                        <datepicker bootstrap-styling v-model="fecfin" :format="formatoFecha" placeholder="Fecha de finalización"></datepicker>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Estatus</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="estatus" class="form-control" placeholder="Estatus">
+                                        
+                                        <!--la variable idcategoria asociado a v-model la asignamos
+                                        en la propiedad data en javascript (ver al final) -->
+
+                                        <select class="form-control" v-model="estatus">
+                                          
+                                          <!-- el id y nombre asociado en el objeto categoria vienen de los campos
+                                          de la tabla categorias de la bd-->
+                                          <option disabled selected="selected">Seleccione</option>
+                                          <option value="1">Activo</option>
+                                           <option value="0">Inactivo</option>
+                                          
+                                        </select>
+                                       
                                     </div>
                                 </div>  
                             </form>
@@ -259,6 +272,9 @@
 </style>
 
 <script>
+    import Datepicker from 'vuejs-datepicker';
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -303,6 +319,10 @@
             }            
         },
 
+        components: {
+            Datepicker
+        },
+
         computed: {
             pagesNumber: function(){
                 if(!this.pagination.to){
@@ -328,7 +348,14 @@
             }
         },
 
-        methods: {                    
+        methods: { 
+
+            formatoFecha(date) {
+                
+                return moment(date).format('DD/MM/YYYY');
+
+            },
+
             //Modulo
             listarObjetivo(page, buscar, criterio) {
                 let me = this; 
@@ -441,7 +468,7 @@
                 me.estatus='';
             },
 
-             ocultarDetalle() {
+            ocultarDetalle() {
                 this.listado = 1;   
             }, 
 
@@ -449,13 +476,16 @@
                 if(this.validarEtapa()) {
                     return;
                 }
-                let me = this;                
+                let me = this; 
+                let fecini = moment( me.fecini ).format("YYYY-MM-DD");
+                let fecfin = moment( me.fecfin ).format("YYYY-MM-DD");           
+
                 me.arrayDetalle.push({                 
-                titulo: me.tituloEtapa,
-                descripcion: me.descripcionEtapa,
-                fecini: me.fecini,
-                fecfin: me.fecfin,
-                estatus: me.estatus,
+                    titulo: me.tituloEtapa,
+                    descripcion: me.descripcionEtapa,
+                    fecini: fecini,
+                    fecfin: fecfin,
+                    estatus: me.estatus,
                 });
                 me.tituloEtapa= '';
                 me.descripcionEtapa = '';
@@ -505,7 +535,7 @@
                         switch(accion){
                             case "registrar":{
                                 this.modal = 1;
-                                this.tituloModal="Registrar objetivo";
+                                this.tituloModal="Registrar etapa";
                                 this.tipoAccion = 1;                                
                                 break;
                             }                                              

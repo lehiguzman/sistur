@@ -225,8 +225,7 @@
 
                                 </div>
                             
-                            </div>
-                             
+                            </div>                             
 
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
@@ -270,17 +269,17 @@
                                     <div class="col-md-9">
                                         <input type="text" v-model="salario" class="form-control" placeholder="Salario del empleado">
                                     </div>
-                                </div>
+                                </div>                                 
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de ingreso</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="fecing" class="form-control" placeholder="Fecha de ingreso del empleado">
+                                        <datepicker bootstrap-styling v-model="fecing" :format="formatoFecha" placeholder="Fecha de ingreso"></datepicker>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de egreso</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="fecegr" class="form-control" placeholder="Fecha de egreso del empleado">
+                                        <datepicker bootstrap-styling v-model="fecegr" :format="formatoFecha" placeholder="Fecha de egreso"></datepicker>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -346,6 +345,8 @@
 </style>
 
 <script>
+    import Datepicker from 'vuejs-datepicker';
+    import moment from 'moment';
     export default {
         data() {
             return {
@@ -403,6 +404,10 @@
             }            
         },
 
+        components: {
+            Datepicker
+        },
+
         computed: {
             pagesNumber: function(){
                 if(!this.pagination.to){
@@ -425,19 +430,28 @@
                     from++;
                 }
                 return pagesArray;
-            }
+            }            
         },
 
         methods: {
+
+            formatoFecha(date) {
+                
+                return moment(date).format('DD/MM/YYYY');
+
+            },
+          
             //Modulo
             listarEmpleado(page, buscar, criterio) {
-                let me = this; 
+                let me = this;                 
+                
                 var url = '/empleado?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio;
 
                 axios.get(url).then( function( response ) {                    
-                    
+                        
                     var respuesta = response.data;
-                    me.empleados = respuesta.empleados.data;
+                    me.empleados = respuesta.empleados.data;                    
+                    me.institucion_id = respuesta.institucion_id;
 
                 });                               
             },
@@ -454,6 +468,11 @@
                     return;
                 }
                 let me=this;
+                let fecing = moment( me.fecing ).format("YYYY-MM-DD");
+                if(me.fecegr) {
+                    me.fecegr = moment( me.fecegr ).format("YYYY-MM-DD");    
+                }                
+                    
                 axios.post('/empleado/registrar', {
                         'cedula':me.cedula,
                         'nombre':me.nombre,
@@ -462,10 +481,10 @@
                         'movil':me.movil,
                         'direccion':me.direccion,
                         'salario':me.salario,
-                        'fecing':me.fecing,
+                        'fecing':fecing,
                         'fecegr':me.fecegr,
                         'cargo_id':me.cargo_id,
-                        'institucion_id':5//me.institucion_id,
+                        'institucion_id': me.institucion_id,
                     }).then(function (response) {
                         alerta.fire("Empleado registrada exitosamente");
                         me.cerrarModal();
@@ -488,6 +507,13 @@
                     return;
                 }
                 let me=this;
+                
+                let fecing = moment( me.fecing ).format("YYYY-MM-DD");
+
+                 if(me.fecegr) {
+                    me.fecegr = moment( me.fecegr ).format("YYYY-MM-DD");    
+                }
+
                 axios.put('/empleado/actualizar', {
                         'id':me.empleado_id,
                         'cedula':me.cedula,
@@ -497,10 +523,10 @@
                         'movil':me.movil,
                         'direccion':me.direccion,
                         'salario':me.salario,
-                        'fecing':me.fecing,
+                        'fecing':fecing,
                         'fecegr':me.fecegr,
                         'cargo_id':me.cargo_id,
-                        'institucion_id': 5//me.institucion_id,
+                        'institucion_id': me.institucion_id,
                     }).then(function (response) {
                         alerta.fire("Empleado editado exitosamente");
                         me.cerrarModal();
@@ -623,7 +649,7 @@
                                 this.institucion_id = 0;                               
                                 break;
                             }
-                            case "actualizar": {
+                            case "actualizar": {                                
                                 this.modal = 1;
                                 this.tituloModal = "Editar empleado";
                                 this.tipoAccion=2;
@@ -853,13 +879,15 @@
                     // always executed
                   });                  
             },  
-        selectObjetivoEmpleado() {
-            this.listarObjetivoEmpleado();
-        }
+            selectObjetivoEmpleado() {
+                this.listarObjetivoEmpleado();
+            },
 ////////////////////////////////////////////////////////////////////////////////////////////
+            
         },
 
-        mounted() {            
+        mounted() {
+            
             this.listarEmpleado(1, this.buscar, this.criterio);        
         }
     }

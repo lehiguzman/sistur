@@ -98,4 +98,5 @@ Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetal
 Route::get('/user', 'UserController@index');
 Route::post('/user/registrar', 'UserController@store');
 Route::put('/user/actualizar', 'UserController@update');
+Route::get('/userData', 'UserController@user');
 Auth::routes();
