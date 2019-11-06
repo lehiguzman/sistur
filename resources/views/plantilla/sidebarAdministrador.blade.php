@@ -48,6 +48,14 @@
                 <a class="nav-link" href="#"><i class="fa fa-list-ol"></i><font color="#372FB4">Cuestionarios</font></a>
             </li> 
 
+            <li @click="menu=12" class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Tipo nominas</font></a>
+            </li> 
+
+            <li @click="menu=13" class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Nominas</font></a>
+            </li> 
+
             <li @click="menu=11" class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Usuarios</font></a>
             </li>             

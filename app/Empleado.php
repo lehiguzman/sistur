@@ -14,7 +14,7 @@ class Empleado extends Model
      * @var array
      */
     protected $fillable = [
-    	'cedula', 'nombre', 'email', 'telefono', 'movil', 'direccion', 'salario', 'fecing', 'fecegr', 'cargo_id', 'institucion_id'
+    	'cedula', 'nombre', 'email', 'telefono', 'movil', 'direccion', 'salario', 'fecing', 'fecegr', 'cargo_id', 'institucion_id', 'tiponomina_id'
     ];
 
     /**

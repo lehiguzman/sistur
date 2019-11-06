@@ -40,6 +40,21 @@ class CursoController extends Controller
         ];
     }
 
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $cursos = Curso::orderBy('id', 'DESC')->paginate(10);
+        } else {
+            $cursos = Curso::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+        }
+
+        $pdf = \PDF::loadView('pdf.cursos', ['cursos' => $cursos]);
+        return $pdf->download('cursos.pdf');
+    }
+
     public function obtenerCabecera(Request $request){
         if (!$request->ajax()) return redirect('/');
  

@@ -21,7 +21,7 @@ class AusenciaController extends Controller
             if($buscar == '') {
                 $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->select('empleados.nombre', 'ausencias.id', 'ausencias.fecfal', 'ausencias.tipo', 'ausencias.empleado_id')->paginate(10);
             } else {
-                $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->where('empleados.'.$criterio, 'like', '%'.$buscar.'%')->orderBy('empleados.id', 'DESC')->paginate(10);
+                $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->select('empleados.nombre', 'ausencias.id', 'ausencias.fecfal', 'ausencias.tipo', 'ausencias.empleado_id')->where($criterio, 'like', '%'.$buscar.'%')->orderBy('empleados.id', 'DESC')->paginate(10);
             }        
         
         return [
@@ -36,6 +36,21 @@ class AusenciaController extends Controller
 
             'ausencias' => $ausencias,            
         ];
+    }
+
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->select('empleados.nombre', 'ausencias.id', 'ausencias.fecfal', 'ausencias.tipo', 'ausencias.empleado_id')->paginate(10);
+        } else {
+            $ausencias = Ausencia::join('empleados', 'ausencias.empleado_id', '=', 'empleados.id')->select('empleados.nombre', 'ausencias.id', 'ausencias.fecfal', 'ausencias.tipo', 'ausencias.empleado_id')->where($criterio, 'like', '%'.$buscar.'%')->orderBy('empleados.id', 'DESC')->paginate(10);
+        }      
+
+        $pdf = \PDF::loadView('pdf.ausencias', ['ausencias' => $ausencias]);
+        return $pdf->download('ausencias.pdf');
     }
 
     /**

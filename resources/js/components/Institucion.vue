@@ -14,6 +14,9 @@
                         <button class="btn btn-primary btn-lg" type="button" @click="abrirModal('institucion', 'registrar')">
                             <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Empresa
                         </button>
+                        <button type="button" class="btn btn-success btn-lg" @click="cargarPdf(1,buscar,criterio);">
+                            <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;Reporte PDF
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -298,6 +301,11 @@
                     me.instituciones = respuesta.instituciones.data;
                     
                 });                               
+            },
+
+            cargarPdf(page, buscar, criterio)
+            {
+                window.open('http://127.0.0.1:8000/institucion/listarPdf?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
             },
 
             registrarInstitucion(){

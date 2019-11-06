@@ -14,6 +14,9 @@
                         <button class="btn btn-primary btn-lg" type="button" @click="abrirModal('ausencia', 'registrar')">
                             <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar ausencia
                         </button>
+                        <button type="button" class="btn btn-success btn-lg" @click="cargarPdf(1,buscar,criterio);">
+                            <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;Reporte PDF
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -21,6 +24,7 @@
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="nombre">Nombre</option>
+                                        <option value="fecfal">Fecha</option>
                                     </select>
                                     <input type="text" @keyup.enter="listarAusencia(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
                                     <button type="submit"  @click="listarAusencia(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -280,6 +284,11 @@
                     me.ausencias = respuesta.ausencias.data;
                     
                 });                               
+            },
+
+            cargarPdf(page, buscar, criterio)
+            {
+                window.open('http://127.0.0.1:8000/ausencia/listarPdf?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
             },
 
             registrarAusencia(){

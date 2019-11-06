@@ -26,6 +26,8 @@ class CreateEmpleadosTable extends Migration
             $table->float('salario', 8,2)->nullable();
             $table->date('fecing')->nullable();
             $table->date('fecegr')->nullable();
+            $table->unsignedInteger('tiponomina_id'); 
+            $table->foreign('tiponomina_id')->references('id')->on('tiponominas'); 
             $table->unsignedInteger('cargo_id'); 
             $table->foreign('cargo_id')->references('id')->on('cargos');            
             $table->timestamps();

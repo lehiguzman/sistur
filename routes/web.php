@@ -22,6 +22,7 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/institucion', 'InstitucionController@index');
 Route::post('/institucion/registrar', 'InstitucionController@store');
 Route::put('/institucion/actualizar', 'InstitucionController@update');
+Route::get('/institucion/listarPdf', 'InstitucionController@listarPdf')->name('instituciones_pdf');
 
 //Tipos de institucion
 Route::get('/tipo', 'TipoController@index');
@@ -57,12 +58,14 @@ Route::post('/empleado/registrar', 'EmpleadoController@store');
 Route::put('/empleado/actualizar', 'EmpleadoController@update');
 Route::delete('/empleado/eliminar/{id}', 'EmpleadoController@destroy');
 Route::get('/empleado/selectEmpleado', 'EmpleadoController@selectEmpleado');
+Route::get('/empleado/listarPdf', 'EmpleadoController@listarPdf')->name('empleados_pdf');
 
 //Ausencia
 Route::get('/ausencia', 'AusenciaController@index');
 Route::post('/ausencia/registrar', 'AusenciaController@store');
 Route::put('/ausencia/actualizar', 'AusenciaController@update');
 Route::delete('/ausencia/eliminar/{id}', 'AusenciaController@destroy');
+Route::get('/ausencia/listarPdf', 'AusenciaController@listarPdf')->name('ausencias_pdf');
 
 //Objetivo
 Route::get('/objetivo', 'ObjetivoController@index');
@@ -85,6 +88,7 @@ Route::get('/curso/obtenerDetalles', 'CursoController@obtenerDetalles');
 Route::get('/curso/selectCurso', 'CursoController@selectCurso');
 Route::get('/curso/selectCursoEmpleado/{curso_id}', 'CursoController@selectCursoEmpleado');
 Route::post('/curso/registrarCursoEmpleado', 'CursoController@registrarCursoEmpleado');
+Route::get('/curso/listarPdf', 'CursoController@listarPdf')->name('cursos_pdf');
 
 //Cuestionario
 Route::get('/cuestionario', 'CuestionarioController@index');
@@ -93,10 +97,27 @@ Route::put('/cuestionario/actualizar', 'CuestionarioController@update');
 Route::delete('/cuestionario/eliminar/{id}', 'CuestionarioController@destroy');
 Route::get('/cuestionario/obtenerCabecera', 'CuestionarioController@obtenerCabecera');
 Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetalles');
+Route::get('/cuestionario/listarPdf', 'CuestionarioController@listarPdf')->name('cuestionarios_pdf');
+
+//Tipo de nominas
+Route::get('/tipoNomina', 'TiponominaController@index');
+Route::post('/tipoNomina/registrar', 'TiponominaController@store');
+Route::put('/tipoNomina/actualizar', 'TiponominaController@update');
+Route::delete('/tipoNomina/eliminar/{id}', 'TiponominaController@destroy');
+Route::get('/tipoNomina/selectTipoNomina', 'TiponominaController@selectTipoNomina');
+
+//Nominas
+Route::get('/nomina', 'NominaController@index');
+Route::post('/nomina/registrar', 'NominaController@store');
+Route::get('/nomina/obtenerCabecera', 'NominaController@obtenerCabecera');
+Route::get('/nomina/obtenerDetalles', 'NominaController@obtenerDetalles');
+Route::get('/nomina/selectNominaEmpleado/{nomina_id}', 'NominaController@selectNominaEmpleado');
+Route::get('/nomina/listarPdf', 'NominaController@listarPdf')->name('nomina_pdf');
 
 //Usuario
 Route::get('/user', 'UserController@index');
 Route::post('/user/registrar', 'UserController@store');
 Route::put('/user/actualizar', 'UserController@update');
 Route::get('/userData', 'UserController@user');
+Route::get('/user/listarPdf', 'UserController@listarPdf')->name('user_pdf');
 Auth::routes();

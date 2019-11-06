@@ -32,6 +32,8 @@ Vue.component('curso', require('./components/Curso.vue').default);
 Vue.component('cuestionario', require('./components/Cuestionario.vue').default);
 Vue.component('usuario', require('./components/Usuario.vue').default);
 Vue.component('reporte', require('./components/Reporte.vue').default);
+Vue.component('tiponomina', require('./components/TipoNomina.vue').default);
+Vue.component('nomina', require('./components/Nomina.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

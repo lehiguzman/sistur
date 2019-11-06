@@ -41,6 +41,21 @@ class CuestionarioController extends Controller
         ];
     }
 
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $cuestionarios = Cuestionario::orderBy('id', 'DESC')->paginate(10);
+        } else {
+            $cuestionarios = Cuestionario::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+        }
+
+        $pdf = \PDF::loadView('pdf.cuestionarios', ['cuestionarios' => $cuestionarios]);
+        return $pdf->download('cuestionarios.pdf');
+    }
+
     public function obtenerCabecera(Request $request){
         
         if (!$request->ajax()) return redirect('/');

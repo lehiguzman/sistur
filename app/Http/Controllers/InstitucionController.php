@@ -58,15 +58,6 @@ class InstitucionController extends Controller
         $institucion->save();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {        
-    }
 
     /**
      * Update the specified resource in storage.
@@ -88,6 +79,21 @@ class InstitucionController extends Controller
         $institucion->estado_id = $request->estado_id;        
         $institucion->save();
 
+    }
+
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $instituciones = Institucion::orderBy('id', 'DESC')->paginate(10);
+        } else {
+            $instituciones = Institucion::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+        }
+
+        $pdf = \PDF::loadView('pdf.instituciones', ['instituciones' => $instituciones]);
+        return $pdf->download('instituciones.pdf');
     }
 
     /**

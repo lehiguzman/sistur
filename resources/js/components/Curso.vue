@@ -15,6 +15,9 @@
                             <button class="btn btn-primary btn-lg" type="button" @click="mostrarDetalle()">
                                 <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Nuevo curso
                             </button>
+                            <button type="button" class="btn btn-success btn-lg" @click="cargarPdf(1,buscar,criterio);">
+                                <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;Reporte PDF
+                            </button>
                         </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -270,10 +273,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-12">
-                            <button type="button" @click="ocultarDetalle()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
-                            
-                        </div>
+                        <div class="col-md-4">
+                            <button type="button" @click="ocultarDetalle()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>                            
+                        </div>                        
                     </div>
                  </div>
                 </template> 
@@ -409,6 +411,11 @@
                     me.cursos = respuesta.cursos.data;
 
                 });                               
+            },
+
+            cargarPdf(page, buscar, criterio)
+            {
+                window.open('http://127.0.0.1:8000/curso/listarPdf?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
             },
 
             registrarCurso(){

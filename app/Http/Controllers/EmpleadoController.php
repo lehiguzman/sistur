@@ -41,6 +41,21 @@ class EmpleadoController extends Controller
         ];
     }
 
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $empleados = Empleado::orderBy('id', 'DESC')->paginate(10);
+        } else {
+            $empleados = Empleado::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+        }
+
+        $pdf = \PDF::loadView('pdf.empleados', ['empleados' => $empleados]);
+        return $pdf->download('empleados.pdf');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -60,8 +75,9 @@ class EmpleadoController extends Controller
         $empleado->salario = $request->salario;
         $empleado->fecing = $request->fecing;
         $empleado->fecegr = $request->fecegr;
+        $empleado->tiponomina_id = $request->tiponomina_id; 
         $empleado->cargo_id = $request->cargo_id; 
-        $empleado->institucion_id = 5;         
+        $empleado->institucion_id = $request->institucion_id;         
         $empleado->save();
     }
 
@@ -84,8 +100,9 @@ class EmpleadoController extends Controller
         $empleado->salario = $request->salario;
         $empleado->fecing = $request->fecing;
         $empleado->fecegr = $request->fecegr;
+        $empleado->tiponomina_id = $request->tiponomina_id; 
         $empleado->cargo_id = $request->cargo_id; 
-        $empleado->institucion_id = 5;             
+        $empleado->institucion_id = $request->institucion_id;           
         $empleado->save();
     }
 

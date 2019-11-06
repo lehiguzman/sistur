@@ -21,6 +21,9 @@
                         <button class="btn btn-primary btn-lg" type="button" @click="abrirObjetivos()">
                             <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Asignar objetivo a empleados
                         </button>
+                        <button type="button" class="btn btn-success btn-lg" @click="cargarPdf(1,buscar,criterio);">
+                            <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp;Reporte PDF
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -28,6 +31,7 @@
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="criterio">
                                         <option value="nombre">Nombre</option>
+                                        <option value="cedula">Cédula</option>
                                     </select>
                                     <input type="text" @keyup.enter="listarEmpleado(1,buscar,criterio);" class="form-control" placeholder="Buscar texto" v-model="buscar">
                                     <button type="submit"  @click="listarEmpleado(1,buscar,criterio);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
@@ -265,6 +269,27 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Nomina</label>
+                                    <div class="col-md-9">
+                                        
+                                        <!--la variable idcategoria asociado a v-model la asignamos
+                                        en la propiedad data en javascript (ver al final) -->
+
+                                        <select class="form-control" v-model="tipoNomina_id">
+                                          
+                                          <!-- el id y nombre asociado en el objeto categoria vienen de los campos
+                                          de la tabla categorias de la bd-->
+                                          <option value="0" disabled>Seleccione</option>
+                                          <!--el arrayCategoria es una variable de la data javascript de vue 
+                                          y se cargan los registros de la categoria una vez se abra la ventana
+                                          modal-->
+                                          <option v-for="tipoNomina in arrayTipoNomina" :key="tipoNomina.id" :value="tipoNomina.id" v-text="tipoNomina.nombre"></option>
+
+                                        </select>
+                                       
+                                    </div>
+                                </div>          
+                                <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">salario</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="salario" class="form-control" placeholder="Salario del empleado">
@@ -356,7 +381,7 @@
                 email: "", 
                 telefono: "",
                 movil: "",
-                direccion: "", 
+                direccion: "",                 
                 salario: 0,
                 fecing: "",
                 fecegr: "",
@@ -387,6 +412,10 @@
                 //Cargos
                 cargo_id: 0,
                 arrayCargo: [],
+
+                //Tipo de nomina
+                tipoNomina_id: "",
+                arrayTipoNomina: [],
 
                 //Instituciones
                 institucion_id: 0,
@@ -451,9 +480,14 @@
                         
                     var respuesta = response.data;
                     me.empleados = respuesta.empleados.data;                    
-                    me.institucion_id = respuesta.institucion_id;
+                    me.institucion_id = respuesta.institucion_id;                    
 
                 });                               
+            },
+
+            cargarPdf(page, buscar, criterio)
+            {
+                window.open('http://127.0.0.1:8000/empleado/listarPdf?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
             },
 
             registrarEmpleado(){
@@ -472,7 +506,7 @@
                 if(me.fecegr) {
                     me.fecegr = moment( me.fecegr ).format("YYYY-MM-DD");    
                 }                
-                    
+                    console.log("institucion : ", me.institucion_id);
                 axios.post('/empleado/registrar', {
                         'cedula':me.cedula,
                         'nombre':me.nombre,
@@ -483,10 +517,11 @@
                         'salario':me.salario,
                         'fecing':fecing,
                         'fecegr':me.fecegr,
+                        'tiponomina_id':me.tipoNomina_id,
                         'cargo_id':me.cargo_id,
                         'institucion_id': me.institucion_id,
                     }).then(function (response) {
-                        alerta.fire("Empleado registrada exitosamente");
+                        alerta.fire("Empleado registrado exitosamente");
                         me.cerrarModal();
                         me.listarEmpleado(1, '', 'nombre');
                     }).catch(function (error) {
@@ -522,6 +557,7 @@
                         'telefono':me.telefono,
                         'movil':me.movil,
                         'direccion':me.direccion,
+                        'tiponomina_id':me.tipoNomina_id,
                         'salario':me.salario,
                         'fecing':fecing,
                         'fecegr':me.fecegr,
@@ -627,6 +663,27 @@
                   });
             },  
 
+            //Tipo de nomina
+            selectTipoNomina() {
+                let me = this;
+
+                var url = '/tipoNomina/selectTipoNomina';
+
+                axios.get(url).then(function (response) {
+                    // handle success                    
+                    var respuesta = response.data;
+                    me.arrayTipoNomina = respuesta.tipoNominas;  
+                    console.log(me.arrayTipoNomina);
+                  })
+                  .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                  })
+                  .finally(function () {
+                    // always executed
+                  });
+            },  
+
             //Modal
             abrirModal(modelo, accion, data=[]) {                   
                 switch(modelo) {
@@ -645,8 +702,7 @@
                                 this.salario = 0;
                                 this.fecing = "";
                                 this.fecegr = "";
-                                this.cargo_id = 0;
-                                this.institucion_id = 0;                               
+                                this.cargo_id = 0;                                
                                 break;
                             }
                             case "actualizar": {                                
@@ -670,6 +726,7 @@
                         }
                     }
                     this.selectCargo();
+                    this.selectTipoNomina();
                 }                
             },            
 

@@ -43,6 +43,21 @@ class UserController extends Controller
         ];
     }
 
+    public function listarPdf(Request $request) {
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '') {
+            $users = User::orderBy('id', 'DESC')->paginate(10);
+        } else {
+            $users = User::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+        }
+
+        $pdf = \PDF::loadView('pdf.users', ['users' => $users]);
+        return $pdf->download('users.pdf');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
