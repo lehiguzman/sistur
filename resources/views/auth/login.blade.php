@@ -48,11 +48,7 @@
                                 <button type="submit" class="btn btn-secondary">
                                     {{ __('Login') }}
                                 </button>
-                            </div> 
-                            <div class="col-md-12 offset-md-5">
-                                <b><a class="btn btn-link text-dark" style="text-decoration: none; font-size: 2em;" href="{{ route('register') }}">Registrarse</a></b>
-                            </div>                          
-                               
+                            </div>                               
                             
                         </div>
                         
