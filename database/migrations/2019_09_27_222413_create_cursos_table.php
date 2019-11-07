@@ -17,7 +17,7 @@ class CreateCursosTable extends Migration
             $table->increments('id');
             $table->string('nombre', 100);
             $table->date('fecini')->nullable();
-            $table->integer('duracion')->nullable();
+            $table->string('duracion')->nullable();
             $table->string('descripcion')->nullable();
             $table->integer('cupos');
             $table->timestamps();

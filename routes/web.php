@@ -89,6 +89,7 @@ Route::get('/curso/selectCurso', 'CursoController@selectCurso');
 Route::get('/curso/selectCursoEmpleado/{curso_id}', 'CursoController@selectCursoEmpleado');
 Route::post('/curso/registrarCursoEmpleado', 'CursoController@registrarCursoEmpleado');
 Route::get('/curso/listarPdf', 'CursoController@listarPdf')->name('cursos_pdf');
+Route::get('/curso/imprimirCurso', 'CursoController@imprimirCurso')->name('imprimir_curso');
 
 //Cuestionario
 Route::get('/cuestionario', 'CuestionarioController@index');

@@ -275,7 +275,11 @@
                     <div class="form-group row">
                         <div class="col-md-4">
                             <button type="button" @click="ocultarDetalle()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>                            
-                        </div>                        
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <button type="button" @click="imprimirCurso()" class="btn btn-primary"><i class="fa fa-print fa-2x"></i> Imprimir</button>                            
+                        </div>                 
                     </div>
                  </div>
                 </template> 
@@ -418,6 +422,11 @@
                 window.open('http://127.0.0.1:8000/curso/listarPdf?page='+ page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
             },
 
+            imprimirCurso() {                
+                console.log(this.curso_id);
+                window.open('http://127.0.0.1:8000/curso/imprimirCurso?id='+this.curso_id, '_blank');
+            },
+
             registrarCurso(){
                 const alerta = Swal.mixin({
                   customClass: {
@@ -463,7 +472,7 @@
                 var arrayCursoT=[];
                 var arrayDetalle=[];
                 var url = '/curso/obtenerCabecera?id=' + id;
-
+                me.curso_id = id;
                 axios.get(url).then( function( response ) {
                     var respuesta = response.data;
                     arrayCursoT = respuesta.curso;

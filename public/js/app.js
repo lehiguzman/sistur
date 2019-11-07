@@ -3368,6 +3368,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3454,6 +3458,10 @@ __webpack_require__.r(__webpack_exports__);
     cargarPdf: function cargarPdf(page, buscar, criterio) {
       window.open('http://127.0.0.1:8000/curso/listarPdf?page=' + page + '&buscar=' + buscar + '&criterio=' + criterio, '_blank');
     },
+    imprimirCurso: function imprimirCurso() {
+      console.log(this.curso_id);
+      window.open('http://127.0.0.1:8000/curso/imprimirCurso?id=' + this.curso_id, '_blank');
+    },
     registrarCurso: function registrarCurso() {
       var alerta = Swal.mixin({
         customClass: {
@@ -3496,6 +3504,7 @@ __webpack_require__.r(__webpack_exports__);
       var arrayCursoT = [];
       var arrayDetalle = [];
       var url = '/curso/obtenerCabecera?id=' + id;
+      me.curso_id = id;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         arrayCursoT = respuesta.curso;
@@ -63808,6 +63817,27 @@ var render = function() {
                         [
                           _c("i", { staticClass: "fa fa-times fa-2x" }),
                           _vm._v(" Cerrar")
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-4" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-4" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.imprimirCurso()
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-print fa-2x" }),
+                          _vm._v(" Imprimir")
                         ]
                       )
                     ])
