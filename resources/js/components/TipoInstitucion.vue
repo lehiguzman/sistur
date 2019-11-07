@@ -9,10 +9,10 @@
                 <div class="card">
                     <div class="card-header">
 
-                       <h2>Tipos de Institucion</h2><br/>
+                       <h2>Tipos de Empresas</h2><br/>
                       
                         <button class="btn btn-primary btn-lg" type="button" @click="abrirModal('tipo', 'registrar')">
-                            <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Tipo de institución
+                            <i class="fa fa-plus fa-2x"></i>&nbsp;&nbsp;Agregar Tipo de empresa
                         </button>
                     </div>
                     <div class="card-body">                        
@@ -84,9 +84,9 @@
 
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de Institución</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de empresa</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="nombre" class="form-control" placeholder="Tipo de institución">                                       
+                                        <input type="text" v-model="nombre" class="form-control" placeholder="Tipo de empresa">                                       
                                     </div>
                                 </div>                                
                             </form>
@@ -241,7 +241,7 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                  title: '¿Estás seguro de eliminar el tipo de Institucion?',
+                  title: '¿Estás seguro de eliminar el tipo de empresa?',
                   //type: 'warning',
                   showCancelButton: true,
                   confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
@@ -256,7 +256,7 @@
                                 me.listarTipo(1, '', 'nombre');
                                 swalWithBootstrapButtons.fire(
                                     'Eliminado!',
-                                    'Tipo de Institucion eliminada.',
+                                    'Tipo de Empresa eliminada.',
                                     'success'
                                 )
                             }).catch(function (error) {
@@ -276,7 +276,7 @@
                 this.errorMostrarMsjTipo=[];
 
                 if(!this.nombre){
-                    this.errorMostrarMsjTipo.push("(*) El tipo de institucion no puede estar vacio");
+                    this.errorMostrarMsjTipo.push("(*) El tipo de empresa no puede estar vacio");
                 }
 
                 if(this.errorMostrarMsjTipo.length) this.errorTipo=1;
@@ -290,14 +290,14 @@
                         switch(accion){
                             case "registrar":{
                                 this.modal = 1;
-                                this.tituloModal="Registrar Tipo de institución";
+                                this.tituloModal="Registrar Tipo de empresa";
                                 this.tipoAccion = 1;
                                 this.nombre = "";                                
                                 break;
                             }
                             case "actualizar": {
                                 this.modal = 1;
-                                this.tituloModal = "Editar Tipo de Institución";
+                                this.tituloModal = "Editar Tipo de empresa";
                                 this.tipoAccion=2;
                                 this.tipo_id = data["id"];
                                 this.nombre = data["nombre"];                                

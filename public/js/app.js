@@ -7481,7 +7481,7 @@ __webpack_require__.r(__webpack_exports__);
         buttonsStyling: false
       });
       swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de eliminar el tipo de Institucion?',
+        title: '¿Estás seguro de eliminar el tipo de empresa?',
         //type: 'warning',
         showCancelButton: true,
         confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
@@ -7493,7 +7493,7 @@ __webpack_require__.r(__webpack_exports__);
           axios["delete"]('/tipo/eliminar/' + id).then(function (response) {
             //console.log( response );
             me.listarTipo(1, '', 'nombre');
-            swalWithBootstrapButtons.fire('Eliminado!', 'Tipo de Institucion eliminada.', 'success');
+            swalWithBootstrapButtons.fire('Eliminado!', 'Tipo de Empresa eliminada.', 'success');
           })["catch"](function (error) {
             // handle error
             console.log(error);
@@ -7507,7 +7507,7 @@ __webpack_require__.r(__webpack_exports__);
       this.errorMostrarMsjTipo = [];
 
       if (!this.nombre) {
-        this.errorMostrarMsjTipo.push("(*) El tipo de institucion no puede estar vacio");
+        this.errorMostrarMsjTipo.push("(*) El tipo de empresa no puede estar vacio");
       }
 
       if (this.errorMostrarMsjTipo.length) this.errorTipo = 1;
@@ -7524,7 +7524,7 @@ __webpack_require__.r(__webpack_exports__);
               case "registrar":
                 {
                   this.modal = 1;
-                  this.tituloModal = "Registrar Tipo de institución";
+                  this.tituloModal = "Registrar Tipo de empresa";
                   this.tipoAccion = 1;
                   this.nombre = "";
                   break;
@@ -7533,7 +7533,7 @@ __webpack_require__.r(__webpack_exports__);
               case "actualizar":
                 {
                   this.modal = 1;
-                  this.tituloModal = "Editar Tipo de Institución";
+                  this.tituloModal = "Editar Tipo de empresa";
                   this.tipoAccion = 2;
                   this.tipo_id = data["id"];
                   this.nombre = data["nombre"];
@@ -69770,7 +69770,7 @@ var render = function() {
     _c("div", { staticClass: "container-fluid" }, [
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [
-          _c("h2", [_vm._v("Tipos de Institucion")]),
+          _c("h2", [_vm._v("Tipos de Empresas")]),
           _c("br"),
           _vm._v(" "),
           _c(
@@ -69786,7 +69786,7 @@ var render = function() {
             },
             [
               _c("i", { staticClass: "fa fa-plus fa-2x" }),
-              _vm._v("  Agregar Tipo de institución\n                    ")
+              _vm._v("  Agregar Tipo de empresa\n                    ")
             ]
           )
         ]),
@@ -70036,7 +70036,7 @@ var render = function() {
                           staticClass: "col-md-3 form-control-label",
                           attrs: { for: "text-input" }
                         },
-                        [_vm._v("Tipo de Institución")]
+                        [_vm._v("Tipo de empresa")]
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-9" }, [
@@ -70052,7 +70052,7 @@ var render = function() {
                           staticClass: "form-control",
                           attrs: {
                             type: "text",
-                            placeholder: "Tipo de institución"
+                            placeholder: "Tipo de empresa"
                           },
                           domProps: { value: _vm.nombre },
                           on: {
