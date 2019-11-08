@@ -39,7 +39,8 @@
                                     <th>Ver detalle</th>
                                     <th>Tipo nomina</th>
                                     <th>Periodo Desde</th>
-                                    <th>Periodo Hasta</th>                                    
+                                    <th>Periodo Hasta</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -52,11 +53,11 @@
                                     <td v-text="nomina.nombre"></td>
                                     <td v-text="nomina.fecini"></td> 
                                     <td v-text="nomina.fecfin"></td>                                    
-                                    <!-- <td>
-                                        <button type="button" class="btn btn-danger btn-md" @click="eliminarCurso(curso.id)">
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-md" @click="eliminarNomina(nomina.id)">
                                           <i class="fa fa-cut fa-2x"></i> Eliminar
                                         </button> &nbsp;
-                                    </td> -->     
+                                    </td>
                                 </tr>                               
                             </tbody>
                         </table>
@@ -433,8 +434,11 @@
                 let me=this;
                 let fecini = moment( me.fecini ).format("YYYY-MM-DD");
                 let fecfin = moment( me.fecfin ).format("YYYY-MM-DD");
-                    console.log("Detalle : ", me.arrayDetalle );
-                axios.post('/nomina/registrar', {
+
+                console.log( "Detalle : ", me.arrayDetalle.length );
+
+                if(me.arrayDetalle.length > 0) {
+                    axios.post('/nomina/registrar', {
                         'tiponomina_id':me.tiponomina_id,
                         'fecini':fecini,
                         'fecfin':fecfin,
@@ -452,7 +456,54 @@
                     alerta.fire("Debe asignar salario al menos a un empleado");
                     console.log("Error de Datos : ", error);
                     });
-            },            
+                } else {
+                    alerta.fire(
+                        'Error!',
+                        'No existen empleados con este tipo de nomina',
+                        'error'
+                    );                            
+                }                    
+            },
+
+            eliminarNomina(id) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                  },
+                 buttonsStyling: false,
+                })
+
+                swalWithBootstrapButtons.fire({
+                  title: '¿Estás seguro de eliminar la Nomina?',
+                  //type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
+                  cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
+                  reverseButtons: true
+                }).then((result) => {
+                  if (result.value) {
+                        
+                    let me=this;
+                        axios.delete('/nomina/eliminar/'+id).then(function (response) {  
+                                //console.log( response );
+                                me.listarNomina(1, '', 'nombre');
+                                swalWithBootstrapButtons.fire(
+                                    'Eliminado!',
+                                    'Nomina eliminada.',
+                                    'success'
+                                )
+                            }).catch(function (error) {
+                            // handle error
+                            console.log(error);
+                            });                    
+                  } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                  ) {                    
+                  }
+                })
+            },       
 
             verNomina(id){
                 let me = this;

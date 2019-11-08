@@ -147,5 +147,19 @@ class NominaController extends Controller
         
         return [ 'empleados' => $empleados ];
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {        
+        if(!$request->ajax()) return redirect('/');              
+
+        $nomina = Nomina::findOrFail($id);   
+        $nomina->delete();
+    }
     
 }

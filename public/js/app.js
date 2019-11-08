@@ -5709,6 +5709,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5834,24 +5835,61 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       var fecini = moment__WEBPACK_IMPORTED_MODULE_1___default()(me.fecini).format("YYYY-MM-DD");
       var fecfin = moment__WEBPACK_IMPORTED_MODULE_1___default()(me.fecfin).format("YYYY-MM-DD");
-      console.log("Detalle : ", me.arrayDetalle);
-      axios.post('/nomina/registrar', {
-        'tiponomina_id': me.tiponomina_id,
-        'fecini': fecini,
-        'fecfin': fecfin,
-        'data': me.arrayDetalle
-      }).then(function (response) {
-        me.listado = 1;
-        me.tipoNomina = '';
-        me.fecini = '';
-        me.fecfin = '';
-        me.arrayDetalle = [];
-        alerta.fire("Nomina registrada exitosamente");
-        me.listarNomina(1, '', 'nombre');
-      })["catch"](function (error) {
-        // handle error
-        alerta.fire("Debe asignar salario al menos a un empleado");
-        console.log("Error de Datos : ", error);
+      console.log("Detalle : ", me.arrayDetalle.length);
+
+      if (me.arrayDetalle.length > 0) {
+        axios.post('/nomina/registrar', {
+          'tiponomina_id': me.tiponomina_id,
+          'fecini': fecini,
+          'fecfin': fecfin,
+          'data': me.arrayDetalle
+        }).then(function (response) {
+          me.listado = 1;
+          me.tipoNomina = '';
+          me.fecini = '';
+          me.fecfin = '';
+          me.arrayDetalle = [];
+          alerta.fire("Nomina registrada exitosamente");
+          me.listarNomina(1, '', 'nombre');
+        })["catch"](function (error) {
+          // handle error
+          alerta.fire("Debe asignar salario al menos a un empleado");
+          console.log("Error de Datos : ", error);
+        });
+      } else {
+        alerta.fire('Error!', 'No existen empleados con este tipo de nomina', 'error');
+      }
+    },
+    eliminarNomina: function eliminarNomina(id) {
+      var _this = this;
+
+      var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: '¿Estás seguro de eliminar la Nomina?',
+        //type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
+        cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.value) {
+          var me = _this;
+          axios["delete"]('/nomina/eliminar/' + id).then(function (response) {
+            //console.log( response );
+            me.listarNomina(1, '', 'nombre');
+            swalWithBootstrapButtons.fire('Eliminado!', 'Nomina eliminada.', 'success');
+          })["catch"](function (error) {
+            // handle error
+            console.log(error);
+          });
+        } else if ( // Read more about handling dismissals
+        result.dismiss === Swal.DismissReason.cancel) {}
       });
     },
     verNomina: function verNomina(id) {
@@ -67023,7 +67061,29 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", {
                               domProps: { textContent: _vm._s(nomina.fecfin) }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger btn-md",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.eliminarNomina(nomina.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", { staticClass: "fa fa-cut fa-2x" }),
+                                  _vm._v(
+                                    " Eliminar\n                                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v("  \n                                ")
+                            ])
                           ])
                         }),
                         0
@@ -67577,7 +67637,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Periodo Desde")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Periodo Hasta")])
+        _c("th", [_vm._v("Periodo Hasta")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Eliminar")])
       ])
     ])
   },

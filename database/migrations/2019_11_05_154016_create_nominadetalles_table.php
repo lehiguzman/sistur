@@ -20,7 +20,7 @@ class CreateNominadetallesTable extends Migration
             $table->float('monsal', 8, 2)->nullable();
             $table->float('monded', 8, 2)->nullable();
             $table->unsignedInteger('nomina_id'); 
-            $table->foreign('nomina_id')->references('id')->on('nominas');
+            $table->foreign('nomina_id')->references('id')->on('nominas')->onDelete('cascade');
             $table->timestamps();
         });
     }

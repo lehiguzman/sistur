@@ -110,6 +110,7 @@ Route::get('/tipoNomina/selectTipoNomina', 'TiponominaController@selectTipoNomin
 //Nominas
 Route::get('/nomina', 'NominaController@index');
 Route::post('/nomina/registrar', 'NominaController@store');
+Route::delete('/nomina/eliminar/{id}', 'NominaController@destroy');
 Route::get('/nomina/obtenerCabecera', 'NominaController@obtenerCabecera');
 Route::get('/nomina/obtenerDetalles', 'NominaController@obtenerDetalles');
 Route::get('/nomina/selectNominaEmpleado/{nomina_id}', 'NominaController@selectNominaEmpleado');
