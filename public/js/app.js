@@ -2899,7 +2899,6 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       axios.post('/cuestionario/registrar', {
         'titulo': me.titulo,
-        'institucion_id': 5,
         'data': me.arrayDetalle
       }).then(function (response) {
         alerta.fire("Cuestionario registrado exitosamente");

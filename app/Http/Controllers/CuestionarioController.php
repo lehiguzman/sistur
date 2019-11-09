@@ -116,12 +116,13 @@ class CuestionarioController extends Controller
      */
     public function store(Request $request)
     {
+        $institucion_id = Auth::user()->institucion_id;
         try{
             DB::beginTransaction();           
  
             $cuestionario = new Cuestionario();            
             $cuestionario->titulo = $request->titulo;
-            $cuestionario->institucion_id = $request->institucion_id;              
+            $cuestionario->institucion_id = $institucion_id;              
             $cuestionario->save();
  
             $detalles = $request->data;//Array de detalles

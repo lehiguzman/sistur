@@ -367,8 +367,7 @@
 
                 let me=this;
                 axios.post('/cuestionario/registrar', {
-                        'titulo':me.titulo,  
-                        'institucion_id':5,
+                        'titulo':me.titulo,                          
                         'data': me.arrayDetalle                    
                     }).then(function (response) {
                         alerta.fire("Cuestionario registrado exitosamente");
