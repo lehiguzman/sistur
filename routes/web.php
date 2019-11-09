@@ -101,6 +101,7 @@ Route::get('/cuestionario/obtenerCabecera', 'CuestionarioController@obtenerCabec
 Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetalles');
 Route::get('/cuestionario/listarPdf', 'CuestionarioController@listarPdf')->name('cuestionarios_pdf');
 Route::get('/cuestionario/listarEncuesta', 'CuestionarioController@listarEncuesta');
+Route::get('/cuestionario/obtenerRespuestas', 'CuestionarioController@obtenerRespuestas');
 
 //Tipo de nominas
 Route::get('/tipoNomina', 'TiponominaController@index');

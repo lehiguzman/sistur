@@ -15,13 +15,18 @@
                     </div>
                     <div class="card-body">                       
                         <table class="table table-bordered table-striped table-sm">
-                            <thead>
+                            <thead v-if="arrayDetalle.length">
                                 <tr class="bg-primary">                                   
                                     <th>Titulo</th>                                    
                                     <th>Opción</th>                                    
                                 </tr>
                             </thead>
-                            <tbody>                               
+                            <thead v-else>
+                                    <tr class="bg-danger">                                   
+                                        <th>Mensaje</th>
+                                    </tr>
+                                </thead>
+                            <tbody v-if="cuestionarios.length">                               
                                 <tr v-for="cuestionario in cuestionarios" :key="cuestionario.id">
                                     <td v-text="cuestionario.titulo"></td>                                     
                                     <td>
@@ -31,6 +36,13 @@
                                     </td>                                                                    
                                 </tr>                               
                             </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="6">
+                                        No tiene cuestionarios por llenar
+                                    </td>
+                                </tr>
+                            </tbody> 
                         </table>
                         <nav>
                             <ul class="pagination">
@@ -68,13 +80,18 @@
                         <div class="form-group row border">
 
                             <table class="table table-bordered table-striped table-sm">
-                                <thead>
+                                <thead v-if="arrayDetalle.length">
                                     <tr class="bg-primary">                                   
                                         <th>Pregunta</th>                                    
                                         <th>Respuesta</th>                                    
                                     </tr>
                                 </thead>
-                                <tbody>                               
+                                <thead v-else>
+                                    <tr class="bg-danger">                                   
+                                        <th>Mensaje</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="arrayDetalle.length">
                                     <tr v-for="detalle in arrayDetalle" :key="detalle.id">
                                         <td v-text="detalle.pregunta"></td>                                     
                                         <td v-if="detalle.tipo == 1">
@@ -89,7 +106,14 @@
                                         </td>                                                                   
                                     </tr>                               
                                 </tbody>
-                                 <div class="modal-footer">
+                                <tbody v-else>
+                                    <tr>
+                                        <td colspan="6">
+                                            El cuestionario no tiene preguntas registradas
+                                        </td>
+                                    </tr>
+                                </tbody> 
+                                <div class="modal-footer">
                                     <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                                     <button type="button" @click="registrarEncuesta()" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>
                                 </div> 

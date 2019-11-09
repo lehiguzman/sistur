@@ -108,6 +108,16 @@ class CuestionarioController extends Controller
             }         
     }
 
+    public function obtenerRespuestas(Request $request) {
+
+        $pregunta_id = $request->id;
+
+        $respuestas = Respuesta::where('pregunta_id', '=', $pregunta_id)->get();
+
+        return [ 'respuestas' => $respuestas ];
+        
+    }
+
     /**
      * Store a newly created resource in storage.
      *

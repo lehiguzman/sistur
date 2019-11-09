@@ -35,6 +35,7 @@ Vue.component('reporte', require('./components/Reporte.vue').default);
 Vue.component('tiponomina', require('./components/TipoNomina.vue').default);
 Vue.component('nomina', require('./components/Nomina.vue').default);
 Vue.component('encuesta', require('./components/Encuesta.vue').default);
+Vue.component('evaluacion', require('./components/Evaluacion.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
