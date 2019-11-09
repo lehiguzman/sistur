@@ -210,8 +210,12 @@
                                         <tr v-for="detalle in arrayDetalle" :key="detalle.id">
                                             <td v-text="detalle.pregunta">
                                             </td>
-                                            <td v-text="detalle.tipo">
-                                            </td>                                        
+                                            <td v-if="detalle.tipo == 1">
+                                                Abierta
+                                            </td>
+                                            <td v-else>
+                                                Cerrada
+                                            </td>                                 
                                         </tr>                                    
                                     </tbody>
                                     <tbody v-else>
