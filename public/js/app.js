@@ -4103,7 +4103,7 @@ __webpack_require__.r(__webpack_exports__);
       cargo_id: 0,
       arrayCargo: [],
       //Tipo de nomina
-      tipoNomina_id: "",
+      tipoNomina_id: 0,
       arrayTipoNomina: [],
       //Instituciones
       institucion_id: 0,
@@ -4363,6 +4363,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.fecing = "";
                   this.fecegr = "";
                   this.cargo_id = 0;
+                  this.tipoNomina_id = 0;
                   break;
                 }
 
@@ -4382,6 +4383,7 @@ __webpack_require__.r(__webpack_exports__);
                   this.fecing = data["fecing"];
                   this.fecegr = data["fecegr"];
                   this.cargo_id = data["cargo_id"];
+                  this.tipoNomina_id = data["tiponomina_id"];
                   this.institucion_id = data["institucion_id"];
                   break;
                 }
@@ -4414,8 +4416,9 @@ __webpack_require__.r(__webpack_exports__);
       me.listarEmpleado(page, buscar, criterio);
     },
     salir: function salir() {
-      this.listarEmpleado(1, this.buscar, this.criterio); //this.curso_id= 0;
-
+      this.listarEmpleado(1, this.buscar, this.criterio);
+      this.curso_id = 0;
+      this.objetivo_id = 0;
       this.listado = 1;
     },
     /////////////////Funciones de modulo de Asignacion de cursos a empleados ///////////////////
@@ -4825,7 +4828,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     registrarEncuesta: function registrarEncuesta() {
       var me = this;
-      console.log("Detalle : ", me.arrayDetalle[1].id);
       var alerta = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success'
@@ -5385,6 +5387,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5489,143 +5495,35 @@ __webpack_require__.r(__webpack_exports__);
       });
       console.log(id);
     },
-    registrarRama: function registrarRama() {
+    salir: function salir() {
+      this.listarEncuesta(1, this.buscar, this.criterio);
+      this.listado = 1;
+    },
+    registrarEvaluacion: function registrarEvaluacion() {
       var alerta = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success'
         },
         buttonsStyling: false
       });
-
-      if (this.validarRama()) {
-        return;
-      }
-
       var me = this;
-      axios.post('/rama/registrar', {
-        'titulo': me.titulo,
-        'descripcion': me.descripcion
-      }).then(function (response) {
-        alerta.fire("Rama registrada exitosamente");
-        me.cerrarModal();
-        me.listarEncuesta(1, '', 'titulo');
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-    },
-    actualizarRama: function actualizarRama() {
-      var alerta = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success'
-        },
-        buttonsStyling: false
-      });
 
-      if (this.validarRama()) {
-        return;
+      if (me.arrayDetalle.length > 0) {
+        axios.post('/cuestionario/registrarEvaluacion', {
+          'data': me.arrayRespuestas
+        }).then(function (response) {
+          me.listado = 1;
+          me.arrayRespuestas = [];
+          alerta.fire("Evaluaciòn registrada exitosamente");
+          me.listarEncuesta(1, '', 'nombre');
+        })["catch"](function (error) {
+          // handle error
+          alerta.fire("Debe evaluar al menos una pregunta");
+          console.log("Error de Datos : ", error);
+        });
+      } else {
+        alerta.fire('Error!', 'No existen preguntas por evaluar', 'error');
       }
-
-      var me = this;
-      axios.put('/rama/actualizar', {
-        'id': me.rama_id,
-        'titulo': me.titulo,
-        'descripcion': me.descripcion
-      }).then(function (response) {
-        alerta.fire("Rama registrada exitosamente");
-        me.cerrarModal();
-        me.listarEncuesta(1, '', 'titulo');
-      })["catch"](function (error) {
-        // handle error
-        console.log(error);
-      });
-    },
-    eliminarRama: function eliminarRama(id) {
-      var _this = this;
-
-      var swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de eliminar la rama?',
-        //type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
-        cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.value) {
-          var me = _this;
-          axios["delete"]('/rama/eliminar/' + id).then(function (response) {
-            //console.log( response );
-            me.listarEncuesta(1, '', 'titulo');
-            swalWithBootstrapButtons.fire('Eliminado!', 'Rama eliminada.', 'success');
-          })["catch"](function (error) {
-            // handle error
-            console.log(error);
-          });
-        } else if ( // Read more about handling dismissals
-        result.dismiss === Swal.DismissReason.cancel) {}
-      });
-    },
-    validarRama: function validarRama() {
-      this.errorRama = 0;
-      this.errorMostrarMsjRama = [];
-
-      if (!this.titulo) {
-        this.errorMostrarMsjRama.push("(*) El titulo no puede estar vacio");
-      }
-
-      if (this.errorMostrarMsjRama.length) this.errorRama = 1;
-      return this.errorRama;
-    },
-    //Modal
-    abrirModal: function abrirModal(modelo, accion) {
-      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
-      switch (modelo) {
-        case "rama":
-          {
-            switch (accion) {
-              case "registrar":
-                {
-                  this.modal = 1;
-                  this.tituloModal = "Registrar rama";
-                  this.tipoAccion = 1;
-                  this.titulo = "";
-                  break;
-                }
-
-              case "actualizar":
-                {
-                  this.modal = 1;
-                  this.tituloModal = "Editar rama";
-                  this.tipoAccion = 2;
-                  this.rama_id = data["id"];
-                  this.titulo = data["titulo"];
-                  this.descripcion = data["descripcion"];
-                  break;
-                }
-            }
-          }
-      }
-    },
-    cerrarModal: function cerrarModal() {
-      this.modal = 0;
-      this.titulo = "";
-      this.descripcion = "";
-      this.tituloModal = "";
-    },
-    //Paginacion
-    cambiarPagina: function cambiarPagina(page, buscar, criterio) {
-      var me = this; //Actualiza la pagina actual
-
-      me.pagination.current_page = page;
-      me.listarEncuesta(page, buscar, criterio);
     }
   },
   mounted: function mounted() {
@@ -6516,6 +6414,8 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('DD/MM/YYYY');
     },
     verificaNeto: function verificaNeto(index) {
+      console.log(index);
+
       if (this.neto < 0) {
         this.arrayDetalle[index].monded = 0;
       }
@@ -7163,6 +7063,10 @@ __webpack_require__.r(__webpack_exports__);
       me.fecini = '';
       me.fecfin = '';
       me.estatus = '';
+    },
+    salir: function salir() {
+      this.listarObjetivo(1, this.buscar, this.criterio);
+      this.listado = 1;
     },
     ocultarDetalle: function ocultarDetalle() {
       this.listado = 1;
@@ -66515,7 +66419,7 @@ var render = function() {
                       staticClass: "table table-bordered table-striped table-sm"
                     },
                     [
-                      _vm.arrayDetalle.length
+                      _vm.cuestionarios.length
                         ? _c("thead", [_vm._m(2)])
                         : _c("thead", [_vm._m(3)]),
                       _vm._v(" "),
@@ -67715,8 +67619,8 @@ var render = function() {
                                       {
                                         name: "model",
                                         rawName: "v-model",
-                                        value: _vm.detalle.tendencia,
-                                        expression: "detalle.tendencia"
+                                        value: respuesta.tendencia,
+                                        expression: "respuesta.tendencia"
                                       }
                                     ],
                                     staticClass: "form-control",
@@ -67734,7 +67638,7 @@ var render = function() {
                                             return val
                                           })
                                         _vm.$set(
-                                          _vm.detalle,
+                                          respuesta,
                                           "tendencia",
                                           $event.target.multiple
                                             ? $$selectedVal
@@ -67769,7 +67673,43 @@ var render = function() {
                           }),
                           0
                         )
-                      : _c("tbody", [_vm._m(5)])
+                      : _c("tbody", [_vm._m(5)]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.salir()
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-times fa-2x" }),
+                          _vm._v(" Cerrar")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.registrarEvaluacion()
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-save fa-2x" }),
+                          _vm._v(" Guardar")
+                        ]
+                      )
+                    ])
                   ]
                 )
               ]
@@ -69156,13 +69096,13 @@ var render = function() {
                                         {
                                           name: "model",
                                           rawName: "v-model",
-                                          value: detalle.monsal,
-                                          expression: "detalle.monsal"
+                                          value: detalle.salario,
+                                          expression: "detalle.salario"
                                         }
                                       ],
                                       staticClass: "form-control",
                                       attrs: { type: "number" },
-                                      domProps: { value: detalle.monsal },
+                                      domProps: { value: detalle.salario },
                                       on: {
                                         blur: function($event) {
                                           return _vm.verificaNeto(index)
@@ -69173,7 +69113,7 @@ var render = function() {
                                           }
                                           _vm.$set(
                                             detalle,
-                                            "monsal",
+                                            "salario",
                                             $event.target.value
                                           )
                                         }
@@ -69222,7 +69162,8 @@ var render = function() {
                                           "\n                                        " +
                                             _vm._s(
                                               (_vm.neto =
-                                                detalle.monsal - detalle.monded)
+                                                detalle.salario -
+                                                detalle.monded)
                                             ) +
                                             "\n                                    "
                                         )
@@ -69230,7 +69171,7 @@ var render = function() {
                                     : _c("td", [
                                         _vm._v(
                                           "\n                                        " +
-                                            _vm._s(detalle.monsal) +
+                                            _vm._s(detalle.salario) +
                                             "\n                                    "
                                         )
                                       ])
@@ -70051,7 +69992,11 @@ var render = function() {
                     {
                       staticClass: "btn btn-danger",
                       attrs: { type: "button" },
-                      on: { click: function($event) {} }
+                      on: {
+                        click: function($event) {
+                          return _vm.salir()
+                        }
+                      }
                     },
                     [
                       _c("i", { staticClass: "fa fa-times fa-2x" }),
@@ -70383,7 +70328,7 @@ var render = function() {
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
-                        return _vm.cerrarModal()
+                        return _vm.salir()
                       }
                     }
                   },
@@ -73225,23 +73170,17 @@ var render = function() {
                                 ])
                               : _vm._e(),
                             _vm._v(" "),
-                            _vm.user_rol == 2
-                              ? _c("option", { attrs: { value: "2" } }, [
-                                  _vm._v("Gerente")
-                                ])
-                              : _vm._e(),
+                            _c("option", { attrs: { value: "2" } }, [
+                              _vm._v("Gerente")
+                            ]),
                             _vm._v(" "),
-                            _vm.user_rol == 3
-                              ? _c("option", { attrs: { value: "3" } }, [
-                                  _vm._v("Empleado")
-                                ])
-                              : _vm._e(),
+                            _c("option", { attrs: { value: "3" } }, [
+                              _vm._v("Empleado")
+                            ]),
                             _vm._v(" "),
-                            _vm.user_rol == 4
-                              ? _c("option", { attrs: { value: "4" } }, [
-                                  _vm._v("Cliente")
-                                ])
-                              : _vm._e()
+                            _c("option", { attrs: { value: "4" } }, [
+                              _vm._v("Cliente")
+                            ])
                           ]
                         )
                       ])
@@ -89612,7 +89551,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\lehyj\Documents\LARAVEL\sistur\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\sistur\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

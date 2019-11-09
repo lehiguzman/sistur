@@ -108,7 +108,7 @@
                                 
                                 <td v-text="respuesta.respuesta"></td>                                     
                                 <td>
-                                    <select class="form-control" v-model="detalle.tendencia">
+                                    <select class="form-control" v-model="respuesta.tendencia">
                                         <option disabled selected="selected">Seleccione</option>
                                         <option value="1">Positiva</option>
                                         <option value="0">Negativa</option>
@@ -124,6 +124,10 @@
                                 </td>
                             </tr>
                         </tbody>
+                         <div class="modal-footer">
+                            <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
+                            <button type="button" @click="registrarEvaluacion()" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>
+                        </div> 
                     </table>
                 </template>
                 </div>
@@ -267,6 +271,7 @@
             },
 
             listarRespuestas( id, pregunta ) {
+
                 let me = this;
                 
                 this.pregunta = pregunta;
@@ -287,151 +292,44 @@
                 console.log( id );
             },            
 
-            registrarRama(){
-                const alerta = Swal.mixin({
-                  customClass: {
-                    confirmButton: 'btn btn-success',                    
-                  },
-                 buttonsStyling: false,
-                })
-
-                if(this.validarRama()) {
-                    return;
-                }
-                let me=this;
-                axios.post('/rama/registrar', {
-                        'titulo':me.titulo,
-                        'descripcion':me.descripcion,
-                    }).then(function (response) {
-                        alerta.fire("Rama registrada exitosamente");
-                        me.cerrarModal();
-                        me.listarEncuesta(1, '', 'titulo');
-                    }).catch(function (error) {
-                    // handle error
-                    console.log(error);
-                    });
-            },
-
-            actualizarRama(){
-                const alerta = Swal.mixin({
-                  customClass: {
-                    confirmButton: 'btn btn-success',                    
-                  },
-                 buttonsStyling: false,
-                })
-
-                if(this.validarRama()) {
-                    return;
-                }
-
-                let me=this;
-                axios.put('/rama/actualizar', {
-                        'id':me.rama_id,
-                        'titulo':me.titulo,
-                        'descripcion':me.descripcion,
-                    }).then(function (response) {
-                        alerta.fire("Rama registrada exitosamente");
-                        me.cerrarModal();
-                        me.listarEncuesta(1, '', 'titulo');
-                    }).catch(function (error) {
-                    // handle error
-                    console.log(error);
-                    });
-            },
-
-            eliminarRama(id) {
-                const swalWithBootstrapButtons = Swal.mixin({
-                  customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                  },
-                 buttonsStyling: false,
-                })
-
-                swalWithBootstrapButtons.fire({
-                  title: '¿Estás seguro de eliminar la rama?',
-                  //type: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
-                  cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
-                  reverseButtons: true
-                }).then((result) => {
-                  if (result.value) {
-                        
-                    let me=this;
-                        axios.delete('/rama/eliminar/'+id).then(function (response) {  
-                                //console.log( response );
-                                me.listarEncuesta(1, '', 'titulo');
-                                swalWithBootstrapButtons.fire(
-                                    'Eliminado!',
-                                    'Rama eliminada.',
-                                    'success'
-                                )
-                            }).catch(function (error) {
-                            // handle error
-                            console.log(error);
-                            });                    
-                  } else if (
-                    // Read more about handling dismissals
-                    result.dismiss === Swal.DismissReason.cancel
-                  ) {                    
-                  }
-                })
-            },
-
-            validarRama() {
-                this.errorRama=0;
-                this.errorMostrarMsjRama=[];
-
-                if(!this.titulo){
-                    this.errorMostrarMsjRama.push("(*) El titulo no puede estar vacio");
-                }
-
-                if(this.errorMostrarMsjRama.length) this.errorRama=1;
-                return this.errorRama;
-            },      
-
-            //Modal
-            abrirModal(modelo, accion, data=[]) {                   
-                switch(modelo) {
-                    case "rama": {
-                        switch(accion){
-                            case "registrar":{
-                                this.modal = 1;
-                                this.tituloModal="Registrar rama";
-                                this.tipoAccion = 1;
-                                this.titulo = "";                                
-                                break;
-                            }
-                            case "actualizar": {
-                                this.modal = 1;
-                                this.tituloModal = "Editar rama";
-                                this.tipoAccion=2;
-                                this.rama_id = data["id"];
-                                this.titulo = data["titulo"];
-                                this.descripcion = data["descripcion"];                                 
-                                break;
-                            }                         
-                        }
-                    }
-                }                
+            salir() {
+            
+                this.listarEncuesta(1, this.buscar, this.criterio);
+                
+                this.listado = 1;
             },            
+            
+            registrarEvaluacion() { 
+                const alerta = Swal.mixin({
+                      customClass: {
+                        confirmButton: 'btn btn-success',                    
+                      },
+                     buttonsStyling: false,
+                    })
 
-            cerrarModal() { 
-                this.modal = 0;
-                this.titulo = "";   
-                this.descripcion = "";                
-                this.tituloModal = "";
+            let me = this;
+
+                if(me.arrayDetalle.length > 0) {
+                    axios.post('/cuestionario/registrarEvaluacion', {
+                       'data': me.arrayRespuestas 
+                    }).then(function (response) { 
+                        me.listado = 1;                       
+                        me.arrayRespuestas= [];
+                        alerta.fire("Evaluaciòn registrada exitosamente");
+                        me.listarEncuesta(1, '', 'nombre');
+                    }).catch(function (error) {
+                    // handle error
+                    alerta.fire("Debe evaluar al menos una pregunta");
+                    console.log("Error de Datos : ", error);
+                    });
+                } else {
+                    alerta.fire(
+                        'Error!',
+                        'No existen preguntas por evaluar',
+                        'error'
+                    );                            
+                }           
             },
-
-            //Paginacion
-            cambiarPagina(page, buscar, criterio){
-                let me = this;
-                //Actualiza la pagina actual
-                me.pagination.current_page = page;
-                me.listarEncuesta(page, buscar, criterio);
-            },
-
         },
 
         mounted() {

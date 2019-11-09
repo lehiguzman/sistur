@@ -15,7 +15,7 @@
                     </div>
                     <div class="card-body">                       
                         <table class="table table-bordered table-striped table-sm">
-                            <thead v-if="arrayDetalle.length">
+                            <thead v-if="cuestionarios.length">
                                 <tr class="bg-primary">                                   
                                     <th>Titulo</th>                                    
                                     <th>Opción</th>                                    
@@ -274,7 +274,7 @@
 
             registrarEncuesta(){
                 let me = this;
-                console.log( "Detalle : ", me.arrayDetalle[1].id );
+                
                 
                 const alerta = Swal.mixin({
                   customClass: {

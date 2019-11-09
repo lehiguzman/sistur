@@ -85,20 +85,20 @@
         <h3> Cursos <span class="derecha">{{now()}}</span></h3>
     </div>
     <table>
-     @foreach ($curso as $a)
+     
                 <tr>                    
-                    <th>Curso : {{$a->nombre}}</th>
+                    <th>Curso : {{$curso->nombre}}</th>
                 </tr>
                 <tr>
-                    <th>Fecha de inicio : {{$a->fecini}}</th>
+                    <th>Fecha de inicio : {{$curso->fecini}}</th>
                 </tr>
                 <tr>
-                    <th>Cupos : {{$a->cupos}}</th> 
+                    <th>Cupos : {{$curso->cupos}}</th> 
                 </tr>
                 <tr>
-                    <th>Duración {{$a->duracion}}</th>      
+                    <th>Duración {{$curso->duracion}}</th>      
                 </tr>
-                @endforeach  
+                  
     </table>
     <br>
     <div style="height: 20px; text-align: center;">

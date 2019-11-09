@@ -79,6 +79,9 @@
 	<template v-if="menu==14">
 	    <encuesta></encuesta>
 	</template>
+	<template v-if="menu==13">
+	    <nomina></nomina>
+	</template>
 	<template v-if="menu==15">
 	    <evaluacion></evaluacion>
 	</template>

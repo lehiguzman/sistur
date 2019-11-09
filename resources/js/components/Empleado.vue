@@ -414,7 +414,7 @@
                 arrayCargo: [],
 
                 //Tipo de nomina
-                tipoNomina_id: "",
+                tipoNomina_id: 0,
                 arrayTipoNomina: [],
 
                 //Instituciones
@@ -702,7 +702,8 @@
                                 this.salario = 0;
                                 this.fecing = "";
                                 this.fecegr = "";
-                                this.cargo_id = 0;                                
+                                this.cargo_id = 0;
+                                this.tipoNomina_id = 0;                             
                                 break;
                             }
                             case "actualizar": {                                
@@ -720,6 +721,7 @@
                                 this.fecing = data["fecing"];
                                 this.fecegr = data["fecegr"];
                                 this.cargo_id = data["cargo_id"];
+                                this.tipoNomina_id = data["tiponomina_id"];
                                 this.institucion_id = data["institucion_id"];
                                 break;
                             }                         
@@ -755,8 +757,10 @@
             },
 
             salir() {
+            
                 this.listarEmpleado(1, this.buscar, this.criterio);
-                //this.curso_id= 0;
+                this.curso_id= 0;
+                this.objetivo_id= 0;
                 this.listado = 1;
             },
 

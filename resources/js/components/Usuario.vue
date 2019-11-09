@@ -156,9 +156,9 @@
                                     <div class="col-md-9">
                                         <select v-model="rol" class="form-control">                                            
                                             <option value="1" v-if="user_rol == 1">Administrador</option>
-                                            <option value="2" v-if="user_rol == 2">Gerente</option>
-                                            <option value="3" v-if="user_rol == 3">Empleado</option>
-                                            <option value="4" v-if="user_rol == 4">Cliente</option>
+                                            <option value="2">Gerente</option>
+                                            <option value="3">Empleado</option>
+                                            <option value="4">Cliente</option>
                                             
                                         </select>
                                     </div>

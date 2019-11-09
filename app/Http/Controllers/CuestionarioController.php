@@ -154,6 +154,19 @@ class CuestionarioController extends Controller
         }
     }
 
+    public function registrarEvaluacion(Request $request) { 
+
+        $detalles = $request->data;
+
+        foreach($detalles as $ep=>$det)
+        {
+            $respuesta = Respuesta::findOrFail($det['id']);        
+            $respuesta->tendencia = $det['tendencia'];                    
+            $respuesta->save();
+        }             
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *

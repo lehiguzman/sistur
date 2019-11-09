@@ -13,14 +13,14 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-        	'nombre' => 'Admin',
+            'nombre' => 'Admin',
             'num_documento' => '91919191919',
             'direccion' => 'no aplica',
             'telefono' => '0000000000',
             'condicion' => 1,
             'rol' => 1,
             'imagen' => NULL,
-            'institucion_id' => 5,
+            'institucion_id' => 1,
         	'email' => 'admin@correo.com',
         	'password' => bcrypt('admin')
         ]);

@@ -96,6 +96,7 @@ Route::get('/cuestionario', 'CuestionarioController@index');
 Route::post('/cuestionario/registrar', 'CuestionarioController@store');
 Route::put('/cuestionario/actualizar', 'CuestionarioController@update');
 Route::post('/cuestionario/registrarEncuesta/', 'CuestionarioController@registrarEncuesta');
+Route::post('/cuestionario/registrarEvaluacion', 'CuestionarioController@registrarEvaluacion');
 Route::delete('/cuestionario/eliminar/{id}', 'CuestionarioController@destroy');
 Route::get('/cuestionario/obtenerCabecera', 'CuestionarioController@obtenerCabecera');
 Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetalles');

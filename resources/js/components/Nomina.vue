@@ -150,16 +150,16 @@
                                         <td v-text="detalle.nombre">
                                         </td>
                                         <td>
-                                            <input type="number" @blur="verificaNeto(index)" class="form-control" v-model="detalle.monsal">
+                                            <input type="number" @blur="verificaNeto(index)" class="form-control" v-model="detalle.salario">
                                         </td>    
                                         <td>
                                             <input type="number" class="form-control"  value="0" v-model="detalle.monded" placeholder="0" @blur="verificaNeto(index)">
                                         </td>  
                                         <td v-if="detalle.monded>0">
-                                            {{ neto = detalle.monsal-detalle.monded}}
+                                            {{ neto = detalle.salario-detalle.monded}}
                                         </td>
                                         <td v-else>
-                                            {{detalle.monsal}}
+                                            {{detalle.salario}}
                                         </td>                                        
                                     </tr>                                    
                                 </tbody>
@@ -370,6 +370,8 @@
             },
 
             verificaNeto(index) {
+
+            console.log(index);
                 if(this.neto < 0) {
                     this.arrayDetalle[index].monded = 0;    
                 }
@@ -436,6 +438,8 @@
                 let fecfin = moment( me.fecfin ).format("YYYY-MM-DD");
 
                 console.log( "Detalle : ", me.arrayDetalle.length );
+
+                
 
                 if(me.arrayDetalle.length > 0) {
                     axios.post('/nomina/registrar', {
@@ -547,7 +551,8 @@
                     // handle success                   
                     var respuesta = response.data; 
                     console.log("Respuesta : ", respuesta); 
-                    me.arrayDetalle = respuesta.empleados;                        
+                    me.arrayDetalle = respuesta.empleados;   
+
                   })
                   .catch(function (error) {
                     // handle error
@@ -556,7 +561,6 @@
                   .finally(function () {
                     // always executed
                   });
-
             },
 
             validarNomina() {

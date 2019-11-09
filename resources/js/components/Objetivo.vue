@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" @click="" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
+                        <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                         <button type="button" @click="registrarObjetivo()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Guardar</button>
                     </div>
                     </template>                    
@@ -226,7 +226,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" @click="cerrarModal()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
+                            <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                             <button type="button" @click="agregarDetalle()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Agregar</button>
                         </div>
                     </div>
@@ -466,6 +466,13 @@
                 me.fecini='';
                 me.fecfin='';
                 me.estatus='';
+            },
+
+            salir() {
+            
+                this.listarObjetivo(1, this.buscar, this.criterio);
+                
+                this.listado = 1;
             },
 
             ocultarDetalle() {

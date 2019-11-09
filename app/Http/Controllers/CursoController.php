@@ -77,7 +77,7 @@ class CursoController extends Controller
     public function imprimirCurso(Request $request){
         
         $id = $request->id;
-        $curso = Curso::find($id)->get();
+        $curso = Curso::find($id);
         $detalles = Contenido::where('curso_id', '=', $id)->get();         
         
         $pdf = \PDF::loadView('pdf.curso', ['curso' => $curso, 'detalles' => $detalles]);

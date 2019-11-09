@@ -84,8 +84,8 @@ class NominaController extends Controller
                 $detalleNomina = new Nominadetalle();
                 $detalleNomina->nomina_id = $nomina->id;
                 $detalleNomina->empleado_id = $det['id'];
-                $detalleNomina->monsal = $det['monsal'];
-                if($det['monded']) { $detalleNomina->monded = $det['monded']; }
+                $detalleNomina->monsal = $det['salario'];
+                if(isset($det['monded'])) { $detalleNomina->monded = $det['monded'];  }
                 else { $detalleNomina->monded = 0.00; }
                 $detalleNomina->save();
             }             
