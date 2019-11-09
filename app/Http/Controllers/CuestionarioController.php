@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Cuestionario;
 use App\Pregunta;
+use App\Respuesta;
+use Auth;
 
 class CuestionarioController extends Controller
 {
@@ -22,7 +24,7 @@ class CuestionarioController extends Controller
             $criterio = $request->criterio;
 
             if($buscar == '') {
-                $cuestionarios = Cuestionario::orderBy('id', 'DESC')->paginate(10);
+                $cuestionarios = Cuestionario::orderBy('id', 'DESC')->paginate(10);                
             } else {
                 $cuestionarios = Cuestionario::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
             }        
@@ -39,6 +41,21 @@ class CuestionarioController extends Controller
 
             'cuestionarios' => $cuestionarios
         ];
+    }
+
+    public function listarEncuesta(Request $request) {    
+
+        $user_id = Auth::user()->id;
+        $encuestas = [];
+    
+        $cuestionariosArr = Respuesta::join('preguntas', 'respuestas.pregunta_id', '=', 'preguntas.id')->select('preguntas.cuestionario_id')->where('user_id', '=', $user_id)->groupBy('preguntas.cuestionario_id')->distinct()->get();
+
+        $cuestionarios = DB::table('cuestionarios')
+                        ->whereNotIn('id', $cuestionariosArr)
+                        ->get();
+
+        
+        return [ 'cuestionarios' => $cuestionarios ];
     }
 
     public function listarPdf(Request $request) {
@@ -74,6 +91,21 @@ class CuestionarioController extends Controller
         $detalles = Pregunta::where('cuestionario_id', '=', $id)->get();
          
         return ['detalles' => $detalles];
+    }
+
+    public function registrarEncuesta(Request $request) {
+
+        $detalles = $request->data;//Array de detalles
+            //Recorro todos los elementos
+ 
+            foreach($detalles as $ep=>$det)
+            {
+                $pregunta = new Respuesta();
+                $pregunta->respuesta = $det['respuesta'];
+                $pregunta->user_id = Auth::user()->id;
+                $pregunta->pregunta_id = $det['id'];                      
+                $pregunta->save();
+            }         
     }
 
     /**
@@ -124,6 +156,8 @@ class CuestionarioController extends Controller
         $cuestionario = Cuestionario::findOrFail($id);   
         $cuestionario->delete();
     }
+
+    
 }
 
 

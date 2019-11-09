@@ -18,6 +18,8 @@ class CreateRespuestasTable extends Migration
             $table->string('respuesta', 500);
             $table->unsignedInteger('pregunta_id'); 
             $table->foreign('pregunta_id')->references('id')->on('preguntas');
+            $table->unsignedInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

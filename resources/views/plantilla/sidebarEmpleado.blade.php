@@ -26,7 +26,11 @@
 
             <li @click="menu=10" class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-list-ol"></i><font color="#372FB4">Cuestionarios</font></a>
-            </li>                            
+            </li>
+
+            <li @click="menu=14" class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Encuesta</font></a>
+            </li>                               
         </ul>
     </nav>
     <button class="sidebar-minimizer brand-minimizer" type="button"></button>

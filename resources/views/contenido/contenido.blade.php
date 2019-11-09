@@ -45,7 +45,9 @@
 	<template v-if="menu==11">
 	    <usuario></usuario>
 	</template>
-
+	<template v-if="menu==14">
+	    <encuesta></encuesta>
+	</template>
 @elseif(Auth::user()->rol == 2)
 	<template v-if="menu==11">
 	    <usuario></usuario>
@@ -71,6 +73,9 @@
 	<template v-if="menu==12">
 	    <tipoNomina></tipoNomina>
 	</template>
+	<template v-if="menu==14">
+	    <encuesta></encuesta>
+	</template>
 @elseif(Auth::user()->rol == 3)
 	<template v-if="menu==0">
 	    <dashboard></dashboard>
@@ -90,5 +95,13 @@
 	<template v-if="menu==10">
 	    <cuestionario></cuestionario>
 	</template>
-	@endif		
+	<template v-if="menu==14">
+	    <encuesta></encuesta>
+	</template>
+@elseif(Auth::user()->rol == 4)
+	<template v-if="menu==14">
+	    <encuesta></encuesta>
+	</template>
+@endif	
+
 @endsection

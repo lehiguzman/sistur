@@ -95,10 +95,12 @@ Route::get('/curso/imprimirCurso', 'CursoController@imprimirCurso')->name('impri
 Route::get('/cuestionario', 'CuestionarioController@index');
 Route::post('/cuestionario/registrar', 'CuestionarioController@store');
 Route::put('/cuestionario/actualizar', 'CuestionarioController@update');
+Route::post('/cuestionario/registrarEncuesta/', 'CuestionarioController@registrarEncuesta');
 Route::delete('/cuestionario/eliminar/{id}', 'CuestionarioController@destroy');
 Route::get('/cuestionario/obtenerCabecera', 'CuestionarioController@obtenerCabecera');
 Route::get('/cuestionario/obtenerDetalles', 'CuestionarioController@obtenerDetalles');
 Route::get('/cuestionario/listarPdf', 'CuestionarioController@listarPdf')->name('cuestionarios_pdf');
+Route::get('/cuestionario/listarEncuesta', 'CuestionarioController@listarEncuesta');
 
 //Tipo de nominas
 Route::get('/tipoNomina', 'TiponominaController@index');

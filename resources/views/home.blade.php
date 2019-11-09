@@ -63,7 +63,10 @@
                 @include('plantilla.sidebarGerente')
             @elseif(Auth::user()->rol == 3)
                 @include('plantilla.sidebarEmpleado')
+            @elseif(Auth::user()->rol == 4)
+                @include('plantilla.sidebarCliente')            
             @else
+
             @endif
        
         <!-- Contenido Principal -->
