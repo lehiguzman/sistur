@@ -107,7 +107,12 @@
                                   modal-->
                                   <option v-for="curso in arrayCurso" :key="curso.id" :value="curso.id" v-text="curso.nombre"></option>
 
-                                </select>                               
+                                </select> 
+                            </div>
+                            <div class="col-md-6" v-if="curso_id">
+                                <button type="button" class="btn btn-success btn-md" @click="imprimirCurso();">
+                                    <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp; Detalle curso
+                                </button>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -128,7 +133,7 @@
                                         <td>
                                             <input type="checkbox" :value="empleado.id" v-model="checkEmpleado" >
                                         </td>
-                                    </tr>                                    
+                                    </tr>                                                                    
                                 </tbody>
                                 <tbody v-else>
                                     <tr>
@@ -169,6 +174,11 @@
                                   <option v-for="objetivo in arrayObjetivo" :key="objetivo.id" :value="objetivo.id" v-text="objetivo.titulo"></option>
 
                                 </select>                               
+                            </div>
+                            <div class="col-md-6" v-if="objetivo_id">
+                                <button type="button" class="btn btn-success btn-md" @click="imprimirObjetivo();">
+                                    <i class="fa fa-print fa-2x"></i>&nbsp;&nbsp; Detalle objetivo
+                                </button>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -794,6 +804,12 @@
 
             },
 
+            imprimirCurso() {                
+                
+                window.open('http://127.0.0.1:8000/curso/imprimirCursoEmpleado?id='+this.curso_id, '_blank');
+
+            },            
+
             registrarCursoEmpleados() {
                 const alerta = Swal.mixin({
                   customClass: {
@@ -884,6 +900,12 @@
                   });
 
         },
+
+        imprimirObjetivo() {                
+                console.log( "Objetivo : ", this.objetivo_id );
+                window.open('http://127.0.0.1:8000/objetivo/imprimirObjetivoEmpleado?id='+this.objetivo_id, '_blank');
+
+            }, 
 
         registrarObjetivoEmpleados() {
                  const alerta = Swal.mixin({

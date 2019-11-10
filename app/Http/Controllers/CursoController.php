@@ -210,6 +210,19 @@ class CursoController extends Controller
                 $curso->empleados()->attach($det);
             }           
     }
+
+    public function imprimirCursoEmpleado(Request $request) {
+            
+        $curso_id = $request->id;
+        
+        $empleadosAll = Empleado::all();                
+        $curso = Curso::find($curso_id);       
+        
+        $empleados = $curso->empleados;
+
+        $pdf = \PDF::loadView('pdf.curso_empleado', ['curso' => $curso, 'empleados' => $empleados]);
+        return $pdf->download('curso.pdf');
+    }
 }
 
 

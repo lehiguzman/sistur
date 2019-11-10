@@ -4063,6 +4063,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4442,6 +4452,9 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {// always executed
       });
     },
+    imprimirCurso: function imprimirCurso() {
+      window.open('http://127.0.0.1:8000/curso/imprimirCursoEmpleado?id=' + this.curso_id, '_blank');
+    },
     registrarCursoEmpleados: function registrarCursoEmpleados() {
       var alerta = Swal.mixin({
         customClass: {
@@ -4508,6 +4521,10 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       })["finally"](function () {// always executed
       });
+    },
+    imprimirObjetivo: function imprimirObjetivo() {
+      console.log("Objetivo : ", this.objetivo_id);
+      window.open('http://127.0.0.1:8000/objetivo/imprimirObjetivoEmpleado?id=' + this.objetivo_id, '_blank');
     },
     registrarObjetivoEmpleados: function registrarObjetivoEmpleados() {
       var alerta = Swal.mixin({
@@ -6499,38 +6516,45 @@ __webpack_require__.r(__webpack_exports__);
         alerta.fire('Error!', 'No existen empleados con este tipo de nomina', 'error');
       }
     },
-    eliminarNomina: function eliminarNomina(id) {
-      var _this = this;
 
-      var swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de eliminar la Nomina?',
-        //type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
-        cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.value) {
-          var me = _this;
-          axios["delete"]('/nomina/eliminar/' + id).then(function (response) {
-            //console.log( response );
-            me.listarNomina(1, '', 'nombre');
-            swalWithBootstrapButtons.fire('Eliminado!', 'Nomina eliminada.', 'success');
-          })["catch"](function (error) {
-            // handle error
-            console.log(error);
-          });
-        } else if ( // Read more about handling dismissals
-        result.dismiss === Swal.DismissReason.cancel) {}
-      });
-    },
+    /*eliminarNomina(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+          },
+         buttonsStyling: false,
+        })
+         swalWithBootstrapButtons.fire({
+          title: '¿Estás seguro de eliminar la Nomina?',
+          //type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '<i class="fa fa-check fa-2x"></i> Aceptar',
+          cancelButtonText: '<i class="fa fa-times fa-2x"></i> Cancelar',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.value) {
+                
+            let me=this;
+                axios.delete('/nomina/eliminar/'+id).then(function (response) {  
+                        //console.log( response );
+                        me.listarNomina(1, '', 'nombre');
+                        swalWithBootstrapButtons.fire(
+                            'Eliminado!',
+                            'Nomina eliminada.',
+                            'success'
+                        )
+                    }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    });                    
+          } else if (
+            // Read more about handling dismissals
+            result.dismiss === Swal.DismissReason.cancel
+          ) {                    
+          }
+        })
+    },   */
     verNomina: function verNomina(id) {
       var me = this;
       me.listado = 2;
@@ -7122,11 +7146,11 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (!this.fecfin) {
-        this.errorMostrarMsjEtapa.push("(*) La fecha de finalización no estar vacia");
+        this.errorMostrarMsjEtapa.push("(*) La fecha de finalización no puede estar vacia");
       }
 
       if (!this.estatus) {
-        this.errorMostrarMsjEtapa.push("(*) El estatus no puede estar vacio");
+        this.errorMostrarMsjEtapa.push("(*) Debe seleccionar un estatus");
       }
 
       if (this.errorMostrarMsjEtapa.length) this.errorEtapa = 1;
@@ -65341,7 +65365,30 @@ var render = function() {
                         ],
                         2
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.curso_id
+                      ? _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-md",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.imprimirCurso()
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fa fa-print fa-2x" }),
+                              _vm._v(
+                                "   Detalle curso\n                            "
+                              )
+                            ]
+                          )
+                        ])
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
@@ -65546,7 +65593,30 @@ var render = function() {
                         ],
                         2
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.objetivo_id
+                      ? _c("div", { staticClass: "col-md-6" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-md",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.imprimirObjetivo()
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fa fa-print fa-2x" }),
+                              _vm._v(
+                                "   Detalle objetivo\n                            "
+                              )
+                            ]
+                          )
+                        ])
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
@@ -68805,29 +68875,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", {
                               domProps: { textContent: _vm._s(nomina.fecfin) }
-                            }),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-danger btn-md",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.eliminarNomina(nomina.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("i", { staticClass: "fa fa-cut fa-2x" }),
-                                  _vm._v(
-                                    " Eliminar\n                                    "
-                                  )
-                                ]
-                              ),
-                              _vm._v("  \n                                ")
-                            ])
+                            })
                           ])
                         }),
                         0
@@ -69401,9 +69449,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Periodo Desde")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Periodo Hasta")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Eliminar")])
+        _c("th", [_vm._v("Periodo Hasta")])
       ])
     ])
   },
@@ -88976,15 +89022,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************!*\
   !*** ./resources/js/components/Nomina.vue ***!
   \********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Nomina_vue_vue_type_template_id_6a3ccfbb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nomina.vue?vue&type=template&id=6a3ccfbb& */ "./resources/js/components/Nomina.vue?vue&type=template&id=6a3ccfbb&");
 /* harmony import */ var _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Nomina.vue?vue&type=script&lang=js& */ "./resources/js/components/Nomina.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _Nomina_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nomina.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Nomina.vue?vue&type=style&index=0&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _Nomina_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nomina.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Nomina.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -89016,7 +89061,7 @@ component.options.__file = "resources/js/components/Nomina.vue"
 /*!*********************************************************************!*\
   !*** ./resources/js/components/Nomina.vue?vue&type=script&lang=js& ***!
   \*********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

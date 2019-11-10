@@ -523,11 +523,11 @@
                 }
 
                  if(!this.fecfin){
-                    this.errorMostrarMsjEtapa.push("(*) La fecha de finalización no estar vacia");
+                    this.errorMostrarMsjEtapa.push("(*) La fecha de finalización no puede estar vacia");
                 }
 
                  if(!this.estatus){
-                    this.errorMostrarMsjEtapa.push("(*) El estatus no puede estar vacio");
+                    this.errorMostrarMsjEtapa.push("(*) Debe seleccionar un estatus");
                 }
 
                 if(this.errorMostrarMsjEtapa.length) this.errorEtapa=1;

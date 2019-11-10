@@ -170,5 +170,18 @@ class ObjetivoController extends Controller
             }           
     }
 
+    public function imprimirObjetivoEmpleado(Request $request) {
+            
+        $objetivo_id = $request->id;
+        
+        $empleadosAll = Empleado::all();                
+        $objetivo = Objetivo::find($objetivo_id);       
+        
+        $empleados = $objetivo->empleados;
+
+        $pdf = \PDF::loadView('pdf.objetivo_empleado', ['objetivo' => $objetivo, 'empleados' => $empleados]);
+        return $pdf->download('objetivo_empleados.pdf');
+    }
+
 }
 

@@ -40,7 +40,7 @@
                                     <th>Tipo nomina</th>
                                     <th>Periodo Desde</th>
                                     <th>Periodo Hasta</th>
-                                    <th>Eliminar</th>
+                                   <!-- <th>Eliminar</th> -->
                                 </tr>
                             </thead>
                             <tbody>                               
@@ -53,11 +53,11 @@
                                     <td v-text="nomina.nombre"></td>
                                     <td v-text="nomina.fecini"></td> 
                                     <td v-text="nomina.fecfin"></td>                                    
-                                    <td>
+                                   <!-- <td>
                                         <button type="button" class="btn btn-danger btn-md" @click="eliminarNomina(nomina.id)">
                                           <i class="fa fa-cut fa-2x"></i> Eliminar
                                         </button> &nbsp;
-                                    </td>
+                                    </td> -->
                                 </tr>                               
                             </tbody>
                         </table>
@@ -479,7 +479,7 @@
                 }                    
             },
 
-            eliminarNomina(id) {
+            /*eliminarNomina(id) {
                 const swalWithBootstrapButtons = Swal.mixin({
                   customClass: {
                     confirmButton: 'btn btn-success',
@@ -517,7 +517,7 @@
                   ) {                    
                   }
                 })
-            },       
+            },   */    
 
             verNomina(id){
                 let me = this;

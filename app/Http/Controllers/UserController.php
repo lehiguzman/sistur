@@ -18,7 +18,7 @@ class UserController extends Controller
          
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-        $institucion_id = Auth::user()->institucion_id;
+        $institucion_id = Auth::user()->institucion_id;        
         $user_rol = Auth::user()->rol;
 
             if($buscar == '') {

@@ -75,8 +75,11 @@ Route::delete('/objetivo/eliminar/{id}', 'ObjetivoController@destroy');
 Route::get('/objetivo/obtenerCabecera', 'ObjetivoController@obtenerCabecera');
 Route::get('/objetivo/obtenerDetalles', 'ObjetivoController@obtenerDetalles');
 Route::get('/objetivo/selectObjetivo', 'ObjetivoController@selectObjetivo');
+
+//Objetivo_empleado
 Route::get('/objetivo/selectObjetivoEmpleado/{objetivo_id}', 'ObjetivoController@selectObjetivoEmpleado');
 Route::post('/objetivo/registrarObjetivoEmpleado', 'ObjetivoController@registrarObjetivoEmpleado');
+Route::get('/objetivo/imprimirObjetivoEmpleado', 'ObjetivoController@imprimirObjetivoEmpleado');
 
 //Curso
 Route::get('/curso', 'CursoController@index');
@@ -86,10 +89,13 @@ Route::delete('/curso/eliminar/{id}', 'CursoController@destroy');
 Route::get('/curso/obtenerCabecera', 'CursoController@obtenerCabecera');
 Route::get('/curso/obtenerDetalles', 'CursoController@obtenerDetalles');
 Route::get('/curso/selectCurso', 'CursoController@selectCurso');
-Route::get('/curso/selectCursoEmpleado/{curso_id}', 'CursoController@selectCursoEmpleado');
-Route::post('/curso/registrarCursoEmpleado', 'CursoController@registrarCursoEmpleado');
 Route::get('/curso/listarPdf', 'CursoController@listarPdf')->name('cursos_pdf');
 Route::get('/curso/imprimirCurso', 'CursoController@imprimirCurso')->name('imprimir_curso');
+
+//Curso_empleado
+Route::get('/curso/selectCursoEmpleado/{curso_id}', 'CursoController@selectCursoEmpleado');
+Route::post('/curso/registrarCursoEmpleado', 'CursoController@registrarCursoEmpleado');
+Route::get('/curso/imprimirCursoEmpleado', 'CursoController@imprimirCursoEmpleado');
 
 //Cuestionario
 Route::get('/cuestionario', 'CuestionarioController@index');
