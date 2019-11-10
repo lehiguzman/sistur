@@ -21,11 +21,13 @@ class UserController extends Controller
         $institucion_id = Auth::user()->institucion_id;        
         $user_rol = Auth::user()->rol;
 
-            if($buscar == '') {
+            if($buscar == '' && $user_rol == '1') {
+                $users = User::orderBy('id', 'DESC')->paginate(10);
+            } elseif($buscar == '') {
                 $users = User::where('institucion_id', '=', $institucion_id)->orderBy('id', 'DESC')->paginate(10);
             } else {
                 $users = User::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
-            }        
+            }
         
         return [
             'pagination' => [

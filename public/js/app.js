@@ -8980,7 +8980,7 @@ __webpack_require__.r(__webpack_exports__);
       if (me.user_rol == 1) {
         empresaId = me.empresa_id;
       } else {
-        empresaId = me.institucion_id;
+        empresaId = me.empresa_id;
       }
 
       console.log("Empresa : ", empresaId);
@@ -8990,7 +8990,7 @@ __webpack_require__.r(__webpack_exports__);
         'direccion': me.direccion,
         'telefono': me.telefono,
         'email': me.email,
-        'institucion_id': me.institucion_id,
+        'institucion_id': empresaId,
         'password': me.password,
         'rol': me.rol,
         'imagen': me.imagen
