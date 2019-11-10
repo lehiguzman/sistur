@@ -6340,6 +6340,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6350,6 +6353,7 @@ __webpack_require__.r(__webpack_exports__);
       fecini: "",
       fecfin: "",
       nombreNomina: "",
+      nomina_id: 0,
       monsal: 0,
       monded: 0,
       neto: 0,
@@ -6412,6 +6416,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     formatoFecha: function formatoFecha(date) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('DD/MM/YYYY');
+    },
+    imprimirDetalle: function imprimirDetalle() {
+      window.open('http://127.0.0.1:8000/nomina/listarDetalle?id=' + this.nomina_id, '_blank');
     },
     verificaNeto: function verificaNeto(index) {
       console.log(index);
@@ -6527,6 +6534,7 @@ __webpack_require__.r(__webpack_exports__);
     verNomina: function verNomina(id) {
       var me = this;
       me.listado = 2;
+      this.nomina_id = id;
       var arrayNominaT = [];
       var arrayDetalle = [];
       var url = '/nomina/obtenerCabecera?id=' + id;
@@ -6620,6 +6628,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
 //
 //
 //
@@ -8914,7 +8926,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         me.arrayUsuario = respuesta.users.data;
-        me.institucion_id = respuesta.institucion_id;
+        me.empresa_id = respuesta.institucion_id;
         me.user_rol = respuesta.user_rol;
         console.log("Rol : ", me.user_rol);
       })["catch"](function (error) {
@@ -69318,7 +69330,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group row" }, [
-                  _c("div", { staticClass: "col-md-12" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
                     _c(
                       "button",
                       {
@@ -69333,6 +69345,25 @@ var render = function() {
                       [
                         _c("i", { staticClass: "fa fa-times fa-2x" }),
                         _vm._v(" Cerrar")
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.imprimirDetalle()
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-print fa-2x" }),
+                        _vm._v(" Imprimir")
                       ]
                     )
                   ])
@@ -69970,11 +70001,17 @@ var render = function() {
                                       }
                                     }),
                                     _vm._v(" "),
-                                    _c("td", {
-                                      domProps: {
-                                        textContent: _vm._s(detalle.estatus)
-                                      }
-                                    })
+                                    detalle.estatus == 1
+                                      ? _c("td", [
+                                          _vm._v(
+                                            "\n                                            Activo\n                                        "
+                                          )
+                                        ])
+                                      : _c("td", [
+                                          _vm._v(
+                                            "\n                                            Inactivo\n                                        "
+                                          )
+                                        ])
                                   ])
                                 }),
                                 0
@@ -70328,7 +70365,7 @@ var render = function() {
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
-                        return _vm.salir()
+                        return _vm.cerrarModal()
                       }
                     }
                   },
@@ -70429,7 +70466,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Fecha de finalización")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Estatus")])
+        _c("th", [_vm._v("Estatuss")])
       ])
     ])
   },
@@ -88939,14 +88976,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************!*\
   !*** ./resources/js/components/Nomina.vue ***!
   \********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Nomina_vue_vue_type_template_id_6a3ccfbb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nomina.vue?vue&type=template&id=6a3ccfbb& */ "./resources/js/components/Nomina.vue?vue&type=template&id=6a3ccfbb&");
 /* harmony import */ var _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Nomina.vue?vue&type=script&lang=js& */ "./resources/js/components/Nomina.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _Nomina_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nomina.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Nomina.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Nomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _Nomina_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nomina.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Nomina.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -88978,7 +89016,7 @@ component.options.__file = "resources/js/components/Nomina.vue"
 /*!*********************************************************************!*\
   !*** ./resources/js/components/Nomina.vue?vue&type=script&lang=js& ***!
   \*********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89551,7 +89589,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\sistur\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\lehyj\Documents\LARAVEL\sistur\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

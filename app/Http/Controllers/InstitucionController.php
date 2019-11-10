@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Institucion;
+use App\Rama;
 
 class InstitucionController extends Controller
 {
@@ -86,13 +87,14 @@ class InstitucionController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
+        $ramas = Rama::orderBy('id', 'DESC')->paginate();
         if($buscar == '') {
             $instituciones = Institucion::orderBy('id', 'DESC')->paginate(10);
         } else {
             $instituciones = Institucion::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
         }
 
-        $pdf = \PDF::loadView('pdf.instituciones', ['instituciones' => $instituciones]);
+        $pdf = \PDF::loadView('pdf.instituciones', ['instituciones' => $instituciones, 'ramas' => $ramas]);
         return $pdf->download('instituciones.pdf');
     }
 

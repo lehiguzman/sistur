@@ -243,10 +243,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                            <div class="col-md-12">
-                                <button type="button" @click="ocultarDetalle()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>                            
-                            </div>
+                        <div class="col-md-6">
+                            <button type="button" @click="ocultarDetalle()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>                            
                         </div>
+                        <div class="col-md-6">
+                            <button type="button" @click="imprimirDetalle()" class="btn btn-primary"><i class="fa fa-print fa-2x"></i> Imprimir</button>                            
+                        </div>
+                    </div>
                 </template>                    
             </div>
         </div>           
@@ -298,6 +301,7 @@
                 fecini: "",
                 fecfin: "", 
                 nombreNomina:"", 
+                nomina_id: 0,
 
                 monsal: 0,
                 monded: 0,
@@ -367,6 +371,12 @@
                 
                 return moment(date).format('DD/MM/YYYY');
 
+            },
+
+            imprimirDetalle() {
+
+                 window.open('http://127.0.0.1:8000/nomina/listarDetalle?id='+this.nomina_id, '_blank');
+                 
             },
 
             verificaNeto(index) {
@@ -512,6 +522,8 @@
             verNomina(id){
                 let me = this;
                 me.listado=2;
+
+                this.nomina_id = id;
 
                 var arrayNominaT=[];                
                 var arrayDetalle=[];

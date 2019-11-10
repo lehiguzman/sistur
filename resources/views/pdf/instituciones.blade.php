@@ -81,9 +81,16 @@
     </style>
 </head>
 <body>
-    <div>
-        <h3>Lista de Empresas <span class="derecha">{{now()}}</span></h3>
-    </div>
+    <table width="100%">
+        <tr>
+            <td width="40%">
+                <img src="./img/logo-simple.png" style="margin: 15px; height: 80px;">            
+            </td>
+            <td width="60%">
+                <h3 align="left">Lista de Empresas</h3>        
+            </td>
+        </tr>
+    </table>
     <div>
         <table class="table table-bordered table-striped table-sm">
             <thead>
@@ -100,7 +107,11 @@
                     <td>{{$a->nombre}}</td>
                     <td>{{$a->direccion}}</td>
                     <td>{{$a->telefono}}</td>
-                    <td>{{$a->rama_id}}</td>
+                    @foreach( $ramas as $rama )
+                        @if($rama->id == $a->rama_id)
+                            <td>{{ $rama->titulo }}</td>
+                        @endif
+                    @endforeach
                 </tr>
                 @endforeach                               
             </tbody>

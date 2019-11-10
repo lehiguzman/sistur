@@ -119,6 +119,7 @@ Route::get('/nomina/obtenerCabecera', 'NominaController@obtenerCabecera');
 Route::get('/nomina/obtenerDetalles', 'NominaController@obtenerDetalles');
 Route::get('/nomina/selectNominaEmpleado/{nomina_id}', 'NominaController@selectNominaEmpleado');
 Route::get('/nomina/listarPdf', 'NominaController@listarPdf')->name('nomina_pdf');
+Route::get('/nomina/listarDetalle', 'NominaController@listarDetalle');
 
 //Usuario
 Route::get('/user', 'UserController@index');

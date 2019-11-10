@@ -311,7 +311,7 @@
 
                     var respuesta = response.data;
                     me.arrayUsuario = respuesta.users.data;
-                    me.institucion_id = respuesta.institucion_id;
+                    me.empresa_id = respuesta.institucion_id;
                     me.user_rol = respuesta.user_rol;
 
                     console.log("Rol : ", me.user_rol);

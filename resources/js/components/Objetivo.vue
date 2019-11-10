@@ -117,7 +117,7 @@
                                             <th>Descripción</th>
                                             <th>Fecha de inicio</th>
                                             <th>Fecha de finalización</th>
-                                            <th>Estatus</th>
+                                            <th>Estatuss</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="arrayDetalle.length">
@@ -135,7 +135,11 @@
                                             </td>
                                             <td v-text="detalle.fecfin">
                                             </td>
-                                            <td v-text="detalle.estatus">
+                                            <td v-if="detalle.estatus == 1">
+                                                Activo
+                                            </td>
+                                            <td v-else>
+                                                Inactivo
                                             </td>
                                         </tr>                                        
                                     </tbody>
@@ -226,7 +230,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" @click="salir()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
+                            <button type="button" @click="cerrarModal()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar</button>
                             <button type="button" @click="agregarDetalle()" v-if="tipoAccion==1" class="btn btn-success"><i class="fa fa-save fa-2x"></i> Agregar</button>
                         </div>
                     </div>

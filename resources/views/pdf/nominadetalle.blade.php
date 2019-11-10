@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte de Curso</title>
+    <title>Reporte de detalle de nomina</title>
     <style>
         body {
             margin: 0;
@@ -87,47 +87,57 @@
                 <img src="./img/logo-simple.png" style="margin: 15px; height: 80px;">            
             </td>
             <td width="60%">
-                <h3 align="left">Lista de Cursos</h3>        
+                <h3 align="left">Nomina</h3>        
             </td>
         </tr>
     </table>      
     <table>
      
-                <tr>                    
-                    <th>Curso : {{$curso->nombre}}</th>
-                </tr>
-                <tr>
-                    <th>Fecha de inicio : {{$curso->fecini}}</th>
-                </tr>
-                <tr>
-                    <th>Cupos : {{$curso->cupos}}</th> 
-                </tr>
-                <tr>
-                    <th>Duración {{$curso->duracion}}</th>      
-                </tr>
+        <tr> 
+            @foreach( $tiponominas as $tiponomina )
+                @if( $tiponomina->id == $nomina->tiponomina_id  )
+                    <th>Tipo de nomina : {{$tiponomina->nombre}}</th>
+                @endif
+            @endforeach
+        </tr>
+        <tr>
+            <th>Periodo desde : {{$nomina->fecini}}</th>
+        </tr>
+        <tr>
+            <th>Periodo hasta : {{$nomina->fecfin}}</th>
+        </tr>               
                   
     </table>
     <br>
     <div style="height: 20px; text-align: center;">
-        <label><b><h3>Contenidos</h3></b></label>
+        <label><b><h3>Empleados</h3></b></label>
     </div>
     <br><hr><br>
     <table class="table table-bordered table-striped table-sm">
         <thead>
             <tr>
-                <th>contenido</th>
-                <th>Descripción</th>
+                <th>Empleado</th>
+                <th>Monto salario</th>
+                <th>Monto deducciones</th>
+                <th>Neto a cobrar</th>                
             </tr>                   
         </thead>
         <tbody>            
-            @foreach ($detalles as $detalle)
+            @foreach ($nominadetalles as $detalle)
             <tr>                    
-                <td>{{$detalle->contenido}}</td>
-                <td>{{$detalle->descripcion}}</td>                    
+                 @foreach( $empleados as $empleado )
+                    @if( $empleado->id == $detalle->empleado_id  )
+                        <td>{{$empleado->nombre}}</td>
+                    @endif
+                @endforeach
+                <td>{{$detalle->monsal}}</td>                    
+                <td>{{$detalle->monded}}</td>
+                <td>{{$detalle->monsal-$detalle->monded}}</td>
             </tr>
             @endforeach                               
         </tbody>
         </table>
     </div>    
+</body>
 </body>
 </html>

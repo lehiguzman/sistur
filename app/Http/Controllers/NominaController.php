@@ -120,6 +120,19 @@ class NominaController extends Controller
         return ['detalles' => $detalles];
     }
 
+    public function listarDetalle(Request $request){ 
+
+        $id = $request->id;
+
+        $nomina = Nomina::find($id);
+        $nominadetalles = Nominadetalle::where('nomina_id', '=', $id)->get();
+        $tiponominas = Tiponomina::orderBy('ID', 'ASC')->paginate();
+        $empleados = Empleado::orderBy('ID', 'ASC')->paginate();
+
+        $pdf = \PDF::loadView('pdf.nominaDetalle', ['nomina' => $nomina, 'nominadetalles' => $nominadetalles, 'tiponominas' => $tiponominas, 'empleados' => $empleados ]);
+        return $pdf->download('nominaDetalle.pdf');
+    }
+
     /**
      * Return the objetivo
      *
