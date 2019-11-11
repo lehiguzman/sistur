@@ -89,9 +89,9 @@ class InstitucionController extends Controller
 
         $ramas = Rama::orderBy('id', 'DESC')->paginate();
         if($buscar == '') {
-            $instituciones = Institucion::orderBy('id', 'DESC')->paginate(10);
+            $instituciones = Institucion::orderBy('id', 'DESC')->where('id', '<>', 1)->paginate(10);
         } else {
-            $instituciones = Institucion::where($criterio, 'like', '%'.$buscar.'%')->orderBy('id', 'DESC')->paginate(10);
+            $instituciones = Institucion::where($criterio, 'like', '%'.$buscar.'%')->where('id', '<>', 1)->orderBy('id', 'DESC')->paginate(10);
         }
 
         $pdf = \PDF::loadView('pdf.instituciones', ['instituciones' => $instituciones, 'ramas' => $ramas]);
