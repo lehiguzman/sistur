@@ -3726,8 +3726,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    barChart: _vueCharts_barChart_js__WEBPACK_IMPORTED_MODULE_0__["default"],
-    doughnutChart: doughnutChart
+    barChart: _vueCharts_barChart_js__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {

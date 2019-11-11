@@ -70,8 +70,7 @@ import barChart from './vueCharts/barChart.js'
 
 export default {
   components: {
-    barChart,
-    doughnutChart    
+    barChart    
   },
   data(){
     return {
