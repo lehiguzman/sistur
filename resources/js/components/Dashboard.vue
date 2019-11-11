@@ -67,7 +67,6 @@
 <script>
 
 import barChart from './vueCharts/barChart.js'
-import doughnutChart from './vueCharts/doughnutChart.js'
 
 export default {
   components: {
@@ -106,7 +105,7 @@ export default {
                 {
                   label: "Respuestas",
                   backgroundColor: ["#1B37DA", "#F72D39"],
-                  data: [10, 20]
+                  data: [20, 10]
                 }
               ]
             },
@@ -116,6 +115,7 @@ export default {
                 text: 'Respuestas'
               },
               animateRotate:true,
+              responsive:true, 
             }
         });
     }

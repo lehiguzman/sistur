@@ -3657,7 +3657,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vueCharts_barChart_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./vueCharts/barChart.js */ "./resources/js/components/vueCharts/barChart.js");
-/* harmony import */ var _vueCharts_doughnutChart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./vueCharts/doughnutChart.js */ "./resources/js/components/vueCharts/doughnutChart.js");
 //
 //
 //
@@ -3724,12 +3723,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     barChart: _vueCharts_barChart_js__WEBPACK_IMPORTED_MODULE_0__["default"],
-    doughnutChart: _vueCharts_doughnutChart_js__WEBPACK_IMPORTED_MODULE_1__["default"]
+    doughnutChart: doughnutChart
   },
   data: function data() {
     return {
@@ -3757,7 +3755,7 @@ __webpack_require__.r(__webpack_exports__);
           datasets: [{
             label: "Respuestas",
             backgroundColor: ["#1B37DA", "#F72D39"],
-            data: [10, 20]
+            data: [20, 10]
           }]
         },
         options: {
@@ -3765,7 +3763,8 @@ __webpack_require__.r(__webpack_exports__);
             display: true,
             text: 'Respuestas'
           },
-          animateRotate: true
+          animateRotate: true,
+          responsive: true
         }
       });
     }
@@ -106314,30 +106313,6 @@ __webpack_require__.r(__webpack_exports__);
 var reactiveProp = vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["mixins"].reactiveProp;
 /* harmony default export */ __webpack_exports__["default"] = ({
   "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Bar"],
-  mixins: [reactiveProp],
-  props: ['options'],
-  mounted: function mounted() {
-    // Overwriting base render method with actual data.
-    this.renderChart(this.chartData, this.options);
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/vueCharts/doughnutChart.js":
-/*!************************************************************!*\
-  !*** ./resources/js/components/vueCharts/doughnutChart.js ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
-
-var reactiveProp = vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["mixins"].reactiveProp;
-/* harmony default export */ __webpack_exports__["default"] = ({
-  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Doughnut"],
   mixins: [reactiveProp],
   props: ['options'],
   mounted: function mounted() {
