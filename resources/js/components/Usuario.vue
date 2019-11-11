@@ -49,7 +49,10 @@
                                     <td v-text="usuario.direccion"></td>
                                     <td v-text="usuario.telefono"></td>
                                     <td v-text="usuario.email"></td>                                    
-                                    <td v-text="usuario.rol"></td>
+                                    <td v-if="usuario.rol == 1">Administrador</td>
+                                    <td v-if="usuario.rol == 2">Gerente</td>
+                                    <td v-if="usuario.rol == 3">Empleado</td>
+                                    <td v-if="usuario.rol == 4">Cliente</td>
                                     <td>
                                         <img :src="'img/usuario/' + usuario.imagen" class="img-responsive" width="100px" height="100px">
                                     </td>

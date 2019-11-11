@@ -8967,6 +8967,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -89382,9 +89385,17 @@ var render = function() {
                       domProps: { textContent: _vm._s(usuario.email) }
                     }),
                     _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(usuario.rol) }
-                    }),
+                    usuario.rol == 1
+                      ? _c("td", [_vm._v("Administrador")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    usuario.rol == 2 ? _c("td", [_vm._v("Gerente")]) : _vm._e(),
+                    _vm._v(" "),
+                    usuario.rol == 3
+                      ? _c("td", [_vm._v("Empleado")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    usuario.rol == 4 ? _c("td", [_vm._v("Cliente")]) : _vm._e(),
                     _vm._v(" "),
                     _c("td", [
                       _c("img", {

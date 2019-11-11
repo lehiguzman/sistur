@@ -52,6 +52,9 @@
 	    <evaluacion></evaluacion>
 	</template>
 @elseif(Auth::user()->rol == 2)
+	<template v-if="menu==0">
+	    <dashboard></dashboard>
+	</template>
 	<template v-if="menu==11">
 	    <usuario></usuario>
 	</template>
